@@ -1,0 +1,109 @@
+---
+description: Regras de frontend — Tailwind, componentes, animações e responsividade
+globs: "**/*.{tsx,jsx,css}"
+alwaysApply: false
+---
+
+# Regras de Frontend — Portfólio Lain
+
+## Design System
+
+- Tokens de cor, tipografia e grid definidos em `docs/design-system.md`
+- Implementar via **variáveis CSS** em `globals.css` + mapeamento em `tailwind.config.ts`
+- Nunca hardcodar hex no JSX — usar classes Tailwind (`bg-background`, `text-accent`, etc.)
+- Override de tema por página/seção via `data-accent-color` no elemento raiz da rota
+
+```css
+/* Exemplo — sempre usar variáveis, nunca cores literais nos componentes */
+color: var(--color-text);
+background: var(--color-background);
+```
+
+## Tailwind
+
+- Usar utilitários Tailwind; CSS customizado só para animações complexas ou `@property`
+- Grid: `grid-cols-12` (desktop), `md:grid-cols-6`, `grid-cols-1` (mobile)
+- Container de conteúdo: classe `.content-container` com `max-width` via `--content-max-width`
+- Gap do grid: variável `--grid-gap` (desktop ~24px, mobile ~16px)
+
+## Estrutura de componentes
+
+| Pasta              | Responsabilidade                                      |
+|--------------------|-------------------------------------------------------|
+| `/components/ui`   | Header, Footer, Button, LinkHover, ProjectCard, Loader |
+| `/components/sections` | Hero, About, Work, Blog, Contact, Speaking      |
+
+- Props tipadas com TypeScript; interfaces exportadas quando reutilizadas
+- Server Components para markup estático; Client wrapper fino para animação
+- Imagens sempre via `next/image` com `alt` descritivo e dimensões definidas
+
+## Animações (modelo cydstumpel.nl)
+
+Stack obrigatória: **GSAP + ScrollTrigger + Lenis + View Transitions API**
+
+### Lenis (scroll suave)
+
+- `@studio-freight/react-lenis` no layout raiz
+- ScrollTrigger deve usar `scrollerProxy` ou integração Lenis documentada no hook `useLenis`
+- Pausar/atualizar Lenis durante transições de página
+
+### GSAP + ScrollTrigger
+
+- Timelines reutilizáveis em `/animations` (ex.: `heroText.ts`, `projectCards.ts`)
+- Registrar plugins uma vez: `gsap.registerPlugin(ScrollTrigger)`
+- **Sempre** chamar `ScrollTrigger.refresh()` após navegação ou resize significativo
+- Usar `gsap.matchMedia()` para conjuntos distintos mobile/tablet/desktop
+- `scrub: true` para paralaxe ligada ao scroll; stagger para entrada de cards
+
+### View Transitions API
+
+- Navegação via helper `navigateWithTransition()` com feature detection
+- Fallback: `router.push()` direto + animação GSAP de fade se `!document.startViewTransition`
+- Pausar ScrollTriggers durante transição; refresh após conclusão
+
+### CSS Scroll-Driven Animations
+
+- Complemento ao ScrollTrigger em navegadores compatíveis (`animation-timeline: view()`)
+- Progressive enhancement — layout e conteúdo devem funcionar sem animação
+
+### Page Load
+
+- Componente `<Loader />` no layout raiz
+- Fade out (opacity 1→0) ao `window.load` ou Lenis ready
+- Respeitar `prefers-reduced-motion`: pular loader ou reduzir duração
+
+### Hover e microinterações
+
+- `LinkHover`: sublinhado animado + tooltip com imagem/vídeo (GSAP fade/scale)
+- `ProjectCard`: border-radius animado via CSS vars `--border-radius` / `--hover-radius`
+- Botão copiar email: `navigator.clipboard.writeText()` + feedback "Copiado!" por 2s
+
+## Responsividade
+
+| Breakpoint | Grid        | Animações                                      |
+|------------|-------------|------------------------------------------------|
+| `lg+`      | 12 colunas  | Completas (paralaxe, tooltips, stagger)        |
+| `md`       | 6 colunas   | Paralaxe reduzida, transições mais curtas      |
+| `< md`     | 1 coluna    | Sem tooltips de vídeo; paralaxe mínima/desligada |
+
+```typescript
+// Padrão obrigatório para animações responsivas
+const mm = gsap.matchMedia();
+mm.add("(min-width: 1024px)", () => { /* desktop */ });
+mm.add("(max-width: 1023px)", () => { /* mobile/tablet */ });
+```
+
+## Acessibilidade
+
+- HTML semântico: `<header>`, `<nav>`, `<main>`, `<section>`, `<footer>`, headings hierárquicos
+- `@media (prefers-reduced-motion: reduce)`: desabilitar paralaxe, Lenis smoothing agressivo e animações longas
+- Focus visible em links e botões (`focus-visible:ring-2`)
+- Tooltips não devem ser única forma de transmitir informação essencial
+- Contraste mínimo WCAG AA entre `--color-text` (#F4F4F4) e `--color-background` (#100A08)
+
+## Performance frontend
+
+- `dynamic()` para Three.js e plugins GSAP pesados
+- Evitar import global de GSAP plugins não utilizados
+- `will-change` apenas durante animação ativa; remover após conclusão
+- Lazy load de imagens abaixo da dobra
