@@ -1,0 +1,15 @@
+{
+  "siteName": "Lain",
+  "tagline": "Desenvolvedor fullstack",
+  "email": "lain.fork@gmail.com",
+  "defaultAccent": "#8F2F06",
+  "socialLinks": {
+    "github": "https://github.com/lain",
+    "linkedin": "https://linkedin.com/in/lain",
+    "instagram": "https://instagram.com/44lain",
+    "codepen": null,
+    "bluesky": null,
+    "mastodon": null,
+    "rss": null
+  }
+}

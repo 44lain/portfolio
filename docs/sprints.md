@@ -32,14 +32,15 @@ Sprint 0 ──► Sprint 1 ──► Sprint 2 ──► Sprint 3 ──► Spri
 
 ### Entregáveis
 
-- [ ] `npx create-next-app@latest` com App Router, TypeScript, Tailwind, `src/` dir
-- [ ] Estrutura de pastas conforme `docs/tech-stack.md`
-- [ ] `globals.css` com variáveis CSS da paleta Lain
-- [ ] `tailwind.config.ts` mapeando tokens de cor, radius e fontes
-- [ ] Fontes via `next/font`: Instrument Serif (títulos) + Geist (corpo)
-- [ ] Layout raiz com `@studio-freight/react-lenis` configurado
-- [ ] Componentes estáticos `<Header />` e `<Footer />` (sem animação)
-- [ ] `.env.example` com variáveis opcionais (webhook contato)
+- [x] `npx create-next-app@latest` com App Router, TypeScript, Tailwind, `src/` dir
+- [x] Estrutura de pastas conforme `docs/tech-stack.md`
+- [x] `globals.css` com variáveis CSS da paleta Lain
+- [x] `@theme inline` mapeando tokens de cor, radius e fontes (Tailwind v4)
+- [x] Fontes via `next/font`: Instrument Serif (títulos) + Geist (corpo)
+- [x] Layout raiz com `lenis/react` configurado
+- [x] Componentes estáticos `<Header />` e `<Footer />` (sem animação)
+- [x] `content/site.json` + `getSiteSettings()` (base da camada MDX)
+- [x] `.env.example` com variáveis opcionais (webhook contato)
 
 ### Critério de pronto
 
