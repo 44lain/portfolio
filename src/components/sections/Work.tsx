@@ -26,7 +26,6 @@ export function Work() {
           <ProjectCard
             key={project.slug}
             project={project}
-            priority={index === 0}
             className={`min-h-[20rem] ${SPANS[index] ?? "lg:col-span-6"}`}
           />
         ))}

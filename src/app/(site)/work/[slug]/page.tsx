@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { Pill, Tag } from "@/components/ui/Pill";
 import { getProjectBySlug, getProjects } from "@/lib/content/mock";
@@ -48,18 +47,9 @@ export default async function ProjectPage({
       </div>
 
       <div
-        className="relative mb-10 aspect-[16/9] w-full overflow-hidden rounded-card"
+        className="mb-10 aspect-[16/9] w-full overflow-hidden rounded-card"
         style={{ backgroundColor: project.accentColor ?? "var(--color-secondary)" }}
-      >
-        <Image
-          src={project.coverImage}
-          alt={`Capa do projeto ${project.title}`}
-          fill
-          sizes="(max-width: 1024px) 100vw, 90rem"
-          priority
-          className="object-cover"
-        />
-      </div>
+      />
 
       <p className="text-large-body max-w-2xl text-foreground/90">{project.summary}</p>
 

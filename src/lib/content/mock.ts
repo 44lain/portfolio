@@ -30,7 +30,7 @@ export const projects: ProjectMeta[] = [
     year: 2026,
     tags: ["Next.js", "TypeScript", "Tailwind CSS"],
     coverImage: "/crinaapp-project.png",
-    accentColor: "#5A280D",
+    accentColor: "#8F2F06",
     published: true,
     summary:
       "Plataforma para compra, venda e destaque de anúncios de cavalos no Brasil.",
@@ -42,7 +42,7 @@ export const projects: ProjectMeta[] = [
     year: 2026,
     tags: ["Next.js", "Python", "nmap"],
     coverImage: "/netatlas-project.png",
-    accentColor: "#0d2b2b",
+    accentColor: "#5A280D",
     published: true,
     summary:
       "Plataforma open source para descoberta e inventário de redes com dashboard, agente local e insights de segurança.",
@@ -54,7 +54,7 @@ export const projects: ProjectMeta[] = [
     year: 2025,
     tags: ["Java 17", "Spring Boot 3.2", "Angular 17", "PostgreSQL 14"],
     coverImage: "/vermolinux-project.png",
-    accentColor: "#1b2333",
+    accentColor: "#975025",
     published: true,
     summary:
       "Sistema de gestão para hortifruti com PDV, controle de estoque, fornecedores e autenticação multi-nível.",
