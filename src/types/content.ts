@@ -1,0 +1,52 @@
+export type SocialLinks = {
+  github?: string | null;
+  linkedin?: string | null;
+  instagram?: string | null;
+  codepen?: string | null;
+  bluesky?: string | null;
+  mastodon?: string | null;
+  rss?: string | null;
+};
+
+export type SiteSettings = {
+  siteName: string;
+  tagline: string;
+  email: string;
+  defaultAccent: string;
+  socialLinks: SocialLinks;
+};
+
+export type ProjectMeta = {
+  title: string;
+  slug: string;
+  year: number;
+  tags: string[];
+  coverImage: string;
+  accentColor?: string;
+  published: boolean;
+  summary: string;
+  /** URL externa do projeto (deploy ou repositório). */
+  link?: string;
+};
+
+export type PostMeta = {
+  title: string;
+  slug: string;
+  excerpt: string;
+  tags: string[];
+  published: boolean;
+  createdAt: string;
+};
+
+export type Service = {
+  title: string;
+  description: string;
+  tags: string[];
+  rotation: number;
+};
+
+export type Skill = {
+  label: string;
+  tone: "accent" | "hover" | "muted";
+  rotation: number;
+};

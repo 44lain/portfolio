@@ -59,16 +59,20 @@ Sprint 0 ──► Sprint 1 ──► Sprint 2 ──► Sprint 3 ──► Spri
 
 ### Entregáveis
 
-- [ ] Seção **Hero** — título estático (sem duplicação animada ainda), tagline
-- [ ] Seção **About** — bio, skills tags, experiência resumida
-- [ ] Seção **Work** — grid de `<ProjectCard />` com dados mock (3–6 projetos)
-- [ ] Seção **Blog** — lista de posts mock com data, tags, excerpt
-- [ ] Seção **Contact** — formulário visual (sem submit funcional) + info de contato
-- [ ] Rotas `/about`, `/work`, `/work/[slug]`, `/blog`, `/blog/[slug]`, `/contact`
-- [ ] Grid responsivo: 12 cols desktop, 6 tablet, 1 mobile
-- [ ] `<LinkHover />` markup estático (underline CSS, sem tooltip animado)
-- [ ] `<ProjectCard />` com hover CSS básico (border-radius transition)
-- [ ] Conteúdo alinhado ao perfil em `docs/skills.md`
+- [x] Seção **Hero** — nome gigante estático (sem duplicação animada ainda)
+- [x] Seção **About** — bio, skills badges, foto com blob, badge de disponibilidade
+- [x] Seção **Work** — grid assimétrico de `<ProjectCard />` com dados mock (4 projetos)
+- [x] Seção **Blog** ("Latest blogs") — grid 3×2 de `<BlogCard />` com data, tags, excerpt
+- [x] Seção **Services** — 3 cards inclinados (Desenvolvimento Web, Mobile, CyberSec)
+- [x] Seção **Contact** — formulário visual (submit desabilitado) + info de contato
+- [x] Rotas `/about`, `/work`, `/work/[slug]`, `/blog`, `/blog/[slug]`, `/contact`
+- [x] Grid responsivo: 12 cols desktop, 6 tablet, 1 mobile
+- [x] `<LinkHover />` markup estático (underline CSS, sem tooltip animado)
+- [x] `<ProjectCard />` com hover CSS (border-radius + scale) e capa via `next/image`
+- [x] Footer redesenhado (bloco accent + faixa do nome) conforme referência
+- [x] Header compacto fiel ao modelo (logo + status à esquerda, nav à direita)
+- [x] Conteúdo alinhado ao perfil em `docs/skills.md`
+- [x] Conteúdo real integrado: papel "Software Engineer", foto e 3 projetos (CrinaApp, NetAtlas, Vermolin.ux) com capas em `/public`
 
 ### Critério de pronto
 

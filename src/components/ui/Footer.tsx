@@ -1,25 +1,12 @@
 import Link from "next/link";
+import type { SiteSettings, SocialLinks } from "@/types/content";
 
 const NAV_LINKS = [
-  { href: "/about", label: "About" },
-  { href: "/work", label: "Work" },
+  { href: "/about", label: "Sobre" },
+  { href: "/work", label: "Projetos" },
   { href: "/blog", label: "Blog" },
-  { href: "/contact", label: "Contact" },
+  { href: "/contact", label: "Contato" },
 ] as const;
-
-type SocialLinks = {
-  github?: string | null;
-  linkedin?: string | null;
-  instagram?: string | null;
-  codepen?: string | null;
-  bluesky?: string | null;
-  mastodon?: string | null;
-  rss?: string | null;
-};
-
-type FooterProps = {
-  socialLinks: SocialLinks;
-};
 
 const SOCIAL_LABELS: Record<keyof SocialLinks, string> = {
   github: "GitHub",
@@ -31,40 +18,86 @@ const SOCIAL_LABELS: Record<keyof SocialLinks, string> = {
   rss: "RSS",
 };
 
-export function Footer({ socialLinks }: FooterProps) {
+type FooterProps = {
+  site: SiteSettings;
+  availability?: string;
+};
+
+export function Footer({ site, availability = "Disponível a partir de Julho 2026" }: FooterProps) {
   const activeSocials = (
-    Object.entries(socialLinks) as [keyof SocialLinks, string | null | undefined][]
+    Object.entries(site.socialLinks) as [keyof SocialLinks, string | null | undefined][]
   ).filter(([, url]) => Boolean(url));
 
   return (
-    <footer className="mt-auto border-t border-secondary/40">
-      <div className="content-container grid grid-cols-1 gap-10 py-16 md:grid-cols-2">
-        <nav className="flex flex-col gap-3" aria-label="Rodapé">
-          {NAV_LINKS.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="caps w-fit text-muted transition-colors hover:text-foreground"
-            >
-              {label}
-            </Link>
-          ))}
-        </nav>
+    <footer className="mt-auto">
+      {/* Bloco accent full-bleed */}
+      <div className="bg-accent text-foreground">
+        <div className="content-container grid grid-cols-1 gap-12 py-16 lg:grid-cols-2 lg:py-20">
+          {/* Info — esquerda */}
+          <div className="flex flex-col gap-6">
+            <span className="text-large-heading">{site.siteName}</span>
+            <div className="flex flex-col">
+              <span className="text-small-heading italic text-foreground/80">
+                Dias de trabalho
+              </span>
+              <span className="text-small-heading">Segunda – Sexta</span>
+            </div>
+          </div>
 
-        <ul className="flex flex-wrap gap-x-6 gap-y-3 md:justify-end">
-          {activeSocials.map(([key, url]) => (
-            <li key={key}>
-              <a
-                href={url!}
-                target={url!.startsWith("http") ? "_blank" : undefined}
-                rel={url!.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="caps text-muted transition-colors hover:text-accent"
-              >
-                {SOCIAL_LABELS[key]}
-              </a>
-            </li>
-          ))}
-        </ul>
+          {/* Disponibilidade — direita */}
+          <div className="flex flex-col gap-3 lg:items-end lg:text-right">
+            <span className="text-large-heading">{availability}</span>
+            <span className="text-small-heading text-foreground/80">
+              Tem um projeto em mente?
+            </span>
+            <a
+              href={`mailto:${site.email}`}
+              className="link-underline text-small-heading w-fit"
+            >
+              {site.email}
+            </a>
+          </div>
+        </div>
+
+        {/* Divisória + colunas */}
+        <div className="content-container border-t border-foreground/30 py-8">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            <nav className="flex flex-wrap gap-x-6 gap-y-2" aria-label="Rodapé">
+              {NAV_LINKS.map(({ href, label }) => (
+                <Link key={href} href={href} className="link-underline text-small-heading">
+                  {label}
+                </Link>
+              ))}
+            </nav>
+
+            {activeSocials.length > 0 && (
+              <ul className="flex flex-wrap gap-x-5 gap-y-2">
+                {activeSocials.map(([key, url]) => (
+                  <li key={key}>
+                    <a
+                      href={url!}
+                      target={url!.startsWith("http") ? "_blank" : undefined}
+                      rel={url!.startsWith("http") ? "noopener noreferrer" : undefined}
+                      className="link-underline caps"
+                    >
+                      {SOCIAL_LABELS[key]}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Faixa do nome gigante */}
+      <div className="overflow-hidden bg-background py-6">
+        <div
+          aria-hidden="true"
+          className="text-marquee whitespace-nowrap px-[clamp(1rem,4vw,3rem)] text-accent"
+        >
+          {`${site.siteName} `.repeat(4).trim()}
+        </div>
       </div>
     </footer>
   );

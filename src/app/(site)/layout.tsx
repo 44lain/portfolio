@@ -13,7 +13,7 @@ export default function SiteLayout({
     <>
       <Header />
       <main className="flex-1">{children}</main>
-      <Footer socialLinks={site.socialLinks} />
+      <Footer site={site} />
     </>
   );
 }

@@ -11,6 +11,7 @@
   --grid-gap: 1.5rem;
   --content-max-width: 90rem;
   --border-radius: 0.75rem;
+  --card-radius: 1.5rem;
   --hover-radius: 2rem;
 }
 
@@ -22,7 +23,7 @@
   --color-hover: var(--hover);
   --color-muted: var(--muted);
   --color-highlight: var(--highlight);
-  --radius-card: var(--border-radius);
+  --radius-card: var(--card-radius);
   --radius-card-hover: var(--hover-radius);
   --font-sans: var(--font-geist-sans);
   --font-serif: var(--font-instrument-serif);
@@ -41,17 +42,28 @@ body {
   padding-inline: clamp(1rem, 4vw, 3rem);
 }
 
+/* Nome gigante (Hero / faixa do footer) — sans display pesado, uppercase */
+.text-marquee {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(5rem, 16vw, 18rem);
+  line-height: 0.85;
+  letter-spacing: -0.01em;
+}
+
+/* Títulos editoriais em serif */
 .text-huge-hero {
   font-family: var(--font-instrument-serif), Georgia, serif;
   font-size: clamp(4rem, 12vw, 14rem);
-  line-height: 0.9;
+  line-height: 0.92;
   letter-spacing: -0.02em;
 }
 
 .text-large-heading {
   font-family: var(--font-instrument-serif), Georgia, serif;
   font-size: clamp(2rem, 5vw, 4rem);
-  line-height: 1.05;
+  line-height: 1;
   letter-spacing: -0.02em;
 }
 
@@ -59,6 +71,16 @@ body {
   font-family: var(--font-instrument-serif), Georgia, serif;
   font-size: clamp(1.25rem, 2vw, 2rem);
   line-height: 1.15;
+}
+
+/* Títulos de cards (projeto/blog/serviço) — sans display, uppercase */
+.text-card-title {
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(1.25rem, 2vw, 1.875rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
 }
 
 .text-large-body {
@@ -74,13 +96,36 @@ body {
 .caps {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
   font-size: 0.75rem;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 
+/* Link com sublinhado animado (origin-left) */
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.15em;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+}
+
 @media (prefers-reduced-motion: reduce) {
-  html.lenis,
-  html.lenis body {
-    scroll-behavior: auto;
+  .link-underline::after {
+    transition: none;
   }
 }
