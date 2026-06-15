@@ -6,8 +6,13 @@ type ServiceCardProps = {
 
 export function ServiceCard({ service }: ServiceCardProps) {
   return (
+    // data-service-card: alvo da animação de empilhamento (Services).
+    // Rotação de repouso vem do CSS (md:) e serve de fallback quando o GSAP não roda
+    // (mobile / prefers-reduced-motion). Quando roda, o GSAP controla o transform.
+    // hover usa cor (não transform) para não conflitar com o scrub do GSAP.
     <article
-      className="flex min-h-[22rem] flex-col rounded-card bg-accent p-8 text-foreground transition-transform duration-300 hover:rotate-0 md:[transform:rotate(var(--rotate))]"
+      data-service-card
+      className="flex min-h-[22rem] flex-col rounded-card bg-accent p-8 text-foreground transition-colors duration-300 will-change-transform hover:bg-hover md:[transform:rotate(var(--rotate))]"
       style={{ "--rotate": `${service.rotation}deg` } as React.CSSProperties}
     >
       <h3 className="text-card-title -skew-y-1">{service.title}</h3>

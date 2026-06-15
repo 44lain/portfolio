@@ -181,8 +181,41 @@ Fiel ao modelo: **logo e status agrupados à esquerda**, nav à direita. Sem gru
 | **Nav items**   | Sobre · Projetos · Blog · Contato                                        |
 
 - **Layout:** `justify-between` entre o **grupo esquerdo** e a **nav** — barra compacta, sem vão central.
-- **Mobile:** logo + link curto "Contato"; status e nav completa ocultos (< md/lg).
-- **Implementação:** Server Component; o email do header é constante no componente (não vem de `site.json`).
+- **Mobile:** logo + **botão de menu (ícone grid 3×3)**; status e nav completa ocultos (< md). O botão abre o `MobileMenu`.
+- **Implementação:** Server Component; o email do header é constante no componente (não vem de `site.json`). `socialLinks` é repassado do layout para o `MobileMenu`.
+
+### Menu mobile (`MobileMenu`)
+
+Visível apenas em `< md`. Botão com **ícone de grid 3×3** (cor `accent`) no canto superior direito, ao lado do logo. Ao acionar, um painel cobre a tela inteira.
+
+```
+┌──────────────────────────────────────────┐  ← painel desliza de CIMA p/ baixo
+│ LAIN                                  ✕    │
+│                                            │
+│  Sobre                                     │  ← nav em serif grande
+│  Projetos                                  │     (.text-large-heading)
+│  Blog                                      │
+│  Contato                                   │
+│                                            │
+│ ──────────────────────────────────────────│
+│ SOCIAIS:  GitHub  LinkedIn  Instagram      │
+│ Disponível [mês ano]                       │
+│ lain.fork@gmail.com                        │
+└──────────────────────────────────────────┘
+```
+
+| Aspecto         | Especificação                                                            |
+|-----------------|--------------------------------------------------------------------------|
+| **Cobertura**   | `fixed inset-0 z-50`, fundo `accent` (`#8F2F06`), texto `foreground` (claro sobre laranja) |
+| **Abertura**    | painel desliza de cima para baixo (`yPercent -100 → 0`, `power3.out` ~0.5s); itens entram em cascata (`stagger`) logo após |
+| **Fechamento**  | mesma timeline em `reverse()`; ao terminar, `visibility: hidden` (não captura foco/clique) |
+| **Topo**        | logo "LAIN" (`.text-nav-logo`) + botão de fechar (ícone ✕)                |
+| **Navegação**   | links em **serif grande** (`.text-large-heading`), empilhados, centralizados verticalmente |
+| **Socials**     | label "Sociais:" + links de `site.socialLinks` (apenas não-nulos), `caps`, abrem em nova aba |
+| **Rodapé**      | disponibilidade (serif itálico) + email `mailto:`                        |
+| **Scroll lock** | `lenis.stop()` ao abrir / `lenis.start()` ao fechar                       |
+| **Acessibilidade** | `role="dialog"`, `aria-modal`, `aria-expanded`/`aria-controls` no botão; fecha com **Esc** e ao trocar de rota |
+| **Implementação** | Client Component; timeline em `/src/animations/mobileMenu.ts` (play/reverse) |
 
 ---
 
@@ -331,7 +364,10 @@ Latest blogs   (heading serif, à esquerda)
 ## Componentes principais (resumo)
 
 ### Header
-Server Component. Logo "LAIN" (`.text-nav-logo`, uppercase) + cluster de status + nav (`.text-nav-link`) à direita. `relative z-10`, fundo opaco, **fluxo normal** (rola e cobre o banner). Ver seção **Header** acima.
+Server Component. Logo "LAIN" (`.text-nav-logo`, uppercase) + cluster de status + nav (`.text-nav-link`) à direita. `relative z-10`, fundo opaco, **fluxo normal** (rola e cobre o banner). Em `< md`, renderiza o `MobileMenu`. Ver seção **Header** acima.
+
+### MobileMenu
+Client Component (`< md`). Botão de grid 3×3 → painel fullscreen `accent` que desliza de cima. Nav serif grande + socials + contato. Timeline em `/animations/mobileMenu.ts`; trava o Lenis enquanto aberto; fecha com Esc / troca de rota. Ver seção **Menu mobile** acima.
 
 ### MarqueeBanner / RouteBanner
 `MarqueeBanner` (Server Component): nome/título gigante repetido em `.text-marquee`, `sticky top-0 z-0` (única camada fixa). Props: `text`, `repeat`, `asHeading`, `headingLabel`. `RouteBanner` (Client Component): escolhe o `text` pela rota (`usePathname`) e é renderizado no layout antes da navbar. Animação de marquee/paralaxe na Sprint 3.
@@ -375,7 +411,16 @@ Mantido conforme documentação anterior (Sprints 3–4). Resumo:
 | Nome marquee    | ScrollTrigger scrub     | translateX paralaxe / rotação leve |
 | Project cards   | ScrollTrigger + stagger | rotate ~3°, opacity 0→1            |
 | Backgrounds     | ScrollTrigger pin/scrub | interpola `--bg-progress`          |
-| Services tilt   | Scroll-driven / GSAP    | reforço da rotação ao entrar       |
+| **Services (cartas)** | **ScrollTrigger `scrub`** | **cards "se juntam como cartas": estado inicial espalhado/rotacionado → alinham no grid e assentam na rotação de repouso** |
+
+#### Animação Services — "cartas se juntando" (✅ implementada)
+
+- **Efeito:** cada card começa **deslocado e rotacionado** (espalhado, como cartas na mesa) e, conforme o scroll avança, **converge** para a posição alinhada do grid, assentando na rotação de repouso (`service.rotation`).
+- **Técnica:** `ScrollTrigger` com `scrub: 0.6` (vinculado ao progresso do scroll); `gsap.fromTo` por card com `xPercent/yPercent/rotation/scale/autoAlpha` (ver `SCATTER` em `/src/animations/servicesStack.ts`).
+- **Trigger:** `start: "top 85%"`, `end: "center 55%"`.
+- **Responsividade:** `gsap.matchMedia()` ativa só em `≥ 768px` **e** `prefers-reduced-motion: no-preference`. Em mobile / reduced-motion os cards ficam estáticos (rotação de repouso via CSS `md:`).
+- **Conflito de transform:** quando o GSAP roda, ele controla o `transform` do card; o hover usa **cor** (`hover:bg-hover`), não transform, para não brigar com o scrub.
+- **Integração Lenis↔GSAP:** em `SmoothScroll`, `useLenis(() => ScrollTrigger.update())` mantém o scrub em dia e `ScrollTrigger.refresh()` recalcula posições a cada troca de rota.
 
 ### 3. Hover
 | Elemento     | Técnica                | Detalhe                       |

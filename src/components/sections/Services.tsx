@@ -1,9 +1,35 @@
+"use client";
+
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { useRef } from "react";
+import { createServicesStack } from "@/animations/servicesStack";
 import { ServiceCard } from "@/components/ui/ServiceCard";
 import { services } from "@/lib/content/mock";
 
+// Seção de serviços com a animação de "cartas se juntando" no scroll.
+// A timeline (ScrollTrigger scrub + matchMedia) está em /animations; aqui só
+// localizamos os cards e delegamos o setup, devolvendo o cleanup ao useGSAP.
 export function Services() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const section = sectionRef.current;
+      if (!section) return;
+      const cards = gsap.utils.toArray<HTMLElement>("[data-service-card]", section);
+      return createServicesStack(
+        section,
+        cards,
+        services.map((service) => service.rotation),
+      );
+    },
+    { scope: sectionRef },
+  );
+
   return (
     <section
+      ref={sectionRef}
       id="services"
       className="content-container py-20 lg:py-28"
       aria-label="Serviços"

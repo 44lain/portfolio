@@ -129,12 +129,14 @@ Sprint 0 ──► Sprint 1 ──► Sprint 2 ──► Sprint 3 ──► Spri
 - [ ] ScrollTrigger paralaxe no título Hero (`scrub: true`)
 - [ ] Entrada staggered dos ProjectCards (rotate + opacity)
 - [ ] Background progress via `--bg-progress` no scroll
+- [x] **Services — "cartas se juntando" no scroll** (ScrollTrigger `scrub`; espalhado → alinhado no grid)
 - [ ] Títulos de serviços/seções com texto duplicado e paralaxe
 - [ ] CSS Scroll-Driven Animations como progressive enhancement
-- [ ] `gsap.matchMedia()` — animações completas desktop, reduzidas tablet, mínimas mobile
-- [ ] Timelines organizadas em `/animations`
-- [ ] Hooks: `useScrollTrigger`, integração Lenis ↔ ScrollTrigger
-- [ ] `prefers-reduced-motion`: fallback estático
+- [x] `gsap.matchMedia()` — animação de Services ativa só em ≥768px + sem reduced-motion
+- [x] Timelines organizadas em `/animations` (`mobileMenu.ts`, `servicesStack.ts`)
+- [x] Integração Lenis ↔ ScrollTrigger (`useLenis(ScrollTrigger.update)` + `refresh()` por rota)
+- [x] `prefers-reduced-motion`: fallback estático (Services)
+- [x] **Menu mobile animado** (`MobileMenu`): botão grid, painel desliza de cima, nav serif + socials + contato (GSAP timeline)
 
 ### Critério de pronto
 

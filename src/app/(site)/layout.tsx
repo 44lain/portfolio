@@ -14,7 +14,7 @@ export default function SiteLayout({
     <>
       {/* Camada fixa do topo (nome gigante). Navbar e conteúdo rolam por cima. */}
       <RouteBanner siteName={site.siteName} />
-      <Header siteName={site.siteName} />
+      <Header siteName={site.siteName} socialLinks={site.socialLinks} />
       <main className="page-surface flex-1">{children}</main>
       <Footer site={site} />
     </>

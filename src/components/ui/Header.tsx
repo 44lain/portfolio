@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { MobileMenu } from "@/components/ui/MobileMenu";
+import type { SocialLinks } from "@/types/content";
 
 const NAV_LINKS = [
   { href: "/about", label: "Sobre" },
@@ -12,6 +14,7 @@ const HEADER_EMAIL = "lain.fork@gmail.com";
 type HeaderProps = {
   siteName?: string;
   availability?: string;
+  socialLinks?: SocialLinks;
 };
 
 // Navbar em fluxo normal (NÃO fixa): rola junto com o conteúdo e cobre o nome
@@ -20,15 +23,16 @@ type HeaderProps = {
 export function Header({
   siteName = "Lain",
   availability = "Disponível Jul 2026",
+  socialLinks = {},
 }: HeaderProps) {
   return (
     <header className="sticky top-0 z-20 border-b border-secondary/40 bg-background">
-      <div className="content-container flex items-center justify-between gap-6 py-6">
+      <div className="content-container flex items-center justify-between gap-6 py-3">
         {/* Grupo esquerdo: logo + status (email + disponibilidade) */}
         <div className="flex items-center gap-6">
           <Link
             href="/"
-            className="text-nav-logo text-accent transition-colors hover:text-hover"
+            className="text-3xl md:text-5xl text-accent font-bold uppercase transition-colors hover:text-hover"
           >
             {siteName}
           </Link>
@@ -47,26 +51,27 @@ export function Header({
           </div>
         </div>
 
-        {/* Nav à direita */}
+        {/* Nav à direita (desktop) */}
         <nav className="hidden items-center gap-8 md:flex" aria-label="Principal">
           {NAV_LINKS.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className="link-underline text-nav-link text-muted hover:text-foreground"
+              className="link-underline text-nav-link text-sm text-muted hover:text-foreground"
             >
               {label}
             </Link>
           ))}
         </nav>
 
-        {/* Mobile: link curto de contato */}
-        <a
-          href={`mailto:${HEADER_EMAIL}`}
-          className="caps text-muted transition-colors hover:text-accent md:hidden"
-        >
-          Contato
-        </a>
+        {/* Mobile: menu em modal (botão de grid + painel animado) */}
+        <MobileMenu
+          siteName={siteName}
+          email={HEADER_EMAIL}
+          availability={availability}
+          navLinks={NAV_LINKS}
+          socialLinks={socialLinks}
+        />
       </div>
     </header>
   );
