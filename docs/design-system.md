@@ -418,7 +418,7 @@ Mantido conforme documentação anterior (Sprints 3–4). Resumo:
 - **Efeito:** cada card começa **deslocado e rotacionado** (espalhado, como cartas na mesa) e, conforme o scroll avança, **converge** para a posição alinhada do grid, assentando na rotação de repouso (`service.rotation`).
 - **Técnica:** `ScrollTrigger` com `scrub: 0.6` (vinculado ao progresso do scroll); `gsap.fromTo` por card com `xPercent/yPercent/rotation/scale/autoAlpha` (ver `SCATTER` em `/src/animations/servicesStack.ts`).
 - **Trigger:** `start: "top 85%"`, `end: "center 55%"`.
-- **Responsividade:** `gsap.matchMedia()` ativa só em `≥ 768px` **e** `prefers-reduced-motion: no-preference`. Em mobile / reduced-motion os cards ficam estáticos (rotação de repouso via CSS `md:`).
+- **Responsividade:** `gsap.matchMedia()` — **desktop (≥768px):** espalhamento horizontal → grid; **mobile (<768px):** espalhamento vertical → empilhamento (`marginTop` negativo colapsa o fluxo até as 3 cartas ficarem juntas). Desativado em `prefers-reduced-motion`.
 - **Conflito de transform:** quando o GSAP roda, ele controla o `transform` do card; o hover usa **cor** (`hover:bg-hover`), não transform, para não brigar com o scrub.
 - **Integração Lenis↔GSAP:** em `SmoothScroll`, `useLenis(() => ScrollTrigger.update())` mantém o scrub em dia e `ScrollTrigger.refresh()` recalcula posições a cada troca de rota.
 

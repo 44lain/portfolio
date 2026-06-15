@@ -27,7 +27,7 @@ export function Header({
 }: HeaderProps) {
   return (
     <header className="sticky top-0 z-20 border-b border-secondary/40 bg-background">
-      <div className="content-container flex items-center justify-between gap-6 py-3">
+      <div className="content-container flex items-center justify-between gap-6 py-4">
         {/* Grupo esquerdo: logo + status (email + disponibilidade) */}
         <div className="flex items-center gap-6">
           <Link
@@ -57,7 +57,7 @@ export function Header({
             <Link
               key={href}
               href={href}
-              className="link-underline text-nav-link text-sm text-muted hover:text-foreground"
+              className="link-underline text-small-heading text-muted hover:text-foreground"
             >
               {label}
             </Link>

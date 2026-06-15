@@ -34,7 +34,7 @@ export function Services() {
       className="content-container py-20 lg:py-28"
       aria-label="Serviços"
     >
-      <div className="grid grid-cols-1 gap-[var(--grid-gap)] md:grid-cols-3">
+      <div className="relative grid grid-cols-1 gap-[var(--grid-gap)] md:grid-cols-3">
         {services.map((service) => (
           <ServiceCard key={service.title} service={service} />
         ))}
