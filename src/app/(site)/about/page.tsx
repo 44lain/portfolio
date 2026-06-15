@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <>
+    <div className="mt-8 lg:mt-12">
       <About />
       <Services />
-    </>
+    </div>
   );
 }

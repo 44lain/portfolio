@@ -12,8 +12,8 @@ export function About() {
       className="content-container grid grid-cols-1 gap-12 pb-20 pt-4 lg:grid-cols-12 lg:pb-28 lg:pt-6"
       aria-label="Sobre"
     >
-      {/* Foto com blob orgânico */}
-      <div className="relative lg:col-span-5">
+      {/* Foto com blob orgânico — reduzida a 60% (−40%) e centralizada na coluna */}
+      <div className="relative mx-auto w-3/5 lg:col-span-5">
         <div className="absolute inset-0 -z-0 translate-x-3 translate-y-3 rounded-[42%_58%_60%_40%/45%_45%_55%_55%] bg-accent/80" />
         <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[42%_58%_60%_40%/45%_45%_55%_55%] bg-secondary">
           <Image
