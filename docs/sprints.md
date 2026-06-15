@@ -59,7 +59,7 @@ Sprint 0 ──► Sprint 1 ──► Sprint 2 ──► Sprint 3 ──► Spri
 
 ### Entregáveis
 
-- [x] Seção **Hero** — nome gigante estático (sem duplicação animada ainda)
+- [x] **Banner** — nome/título gigante fixo (`MarqueeBanner`, sticky) reutilizado em todas as páginas
 - [x] Seção **About** — bio, skills badges, foto com blob, badge de disponibilidade
 - [x] Seção **Work** — grid assimétrico de `<ProjectCard />` com dados mock (4 projetos)
 - [x] Seção **Blog** ("Latest blogs") — grid 3×2 de `<BlogCard />` com data, tags, excerpt
@@ -68,13 +68,11 @@ Sprint 0 ──► Sprint 1 ──► Sprint 2 ──► Sprint 3 ──► Spri
 - [x] Rotas `/about`, `/work`, `/work/[slug]`, `/blog`, `/blog/[slug]`, `/contact`
 - [x] Grid responsivo: 12 cols desktop, 6 tablet, 1 mobile
 - [x] `<LinkHover />` markup estático (underline CSS, sem tooltip animado)
-- [x] `<ProjectCard />` com hover CSS (border-radius) e capa por `accentColor` (bloco de cor)
-- [x] Footer redesenhado (bloco accent + faixa do nome) conforme referência
-- [x] Header compacto fiel ao modelo (logo + status à esquerda, nav à direita)
-- [x] Header/footer **fixos** — conteúdo rola por baixo; `<PageMarquee />` por rota
-- [x] Navbar tipografia ampliada (+2rem): `.text-nav-logo` (3.25rem) e `.text-nav-link` (3rem)
-- [x] Espaçamento de borda consistente: `--edge-padding` máx. 4rem em todas as páginas
-- [x] Layout replicado em Home, About, Work, Blog, posts, Contact
+- [x] `<ProjectCard />` com hover CSS (border-radius) e capa em bloco de cor (`accentColor`)
+- [x] Footer **fixo** (sticky bottom-0, reveal) — bloco accent + faixa do nome conforme referência
+- [x] Header **fixo** (sticky top-0, sempre visível) com logo "LAIN" uppercase ampliado e nav links ampliados
+- [x] Layout full-bleed: elementos próximos às bordas, respiro máx. 4rem (`--edge-padding`)
+- [x] Camadas fixas (banner/footer) com conteúdo rolando por cima (`.page-surface`), aplicado a todas as páginas
 - [x] Conteúdo alinhado ao perfil em `docs/skills.md`
 - [x] Conteúdo real integrado: papel "Software Engineer", foto e 3 projetos (CrinaApp, NetAtlas, Vermolin.ux)
 

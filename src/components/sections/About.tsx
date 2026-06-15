@@ -9,7 +9,7 @@ export function About() {
   return (
     <section
       id="about"
-      className="content-container grid grid-cols-1 gap-10 section-spacing lg:grid-cols-12"
+      className="content-container grid grid-cols-1 gap-12 pb-20 pt-4 lg:grid-cols-12 lg:pb-28 lg:pt-6"
       aria-label="Sobre"
     >
       {/* Foto com blob orgânico */}

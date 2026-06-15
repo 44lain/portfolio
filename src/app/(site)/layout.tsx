@@ -12,7 +12,7 @@ export default function SiteLayout({
   return (
     <>
       <Header siteName={site.siteName} />
-      <main className="site-main">{children}</main>
+      <main className="flex-1">{children}</main>
       <Footer site={site} />
     </>
   );

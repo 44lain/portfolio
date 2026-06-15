@@ -53,7 +53,7 @@ O site original usa **tema claro** (fundo seashell `#FFF5EE`, texto quase preto,
   --highlight: #975025;
 
   --grid-gap: 1.5rem;
-  --content-max-width: 90rem;
+  --edge-padding: clamp(1rem, 5vw, 4rem); /* respiro máx. até a borda da viewport */
   --border-radius: 0.75rem;   /* cards de blog */
   --card-radius: 1.5rem;      /* cards de projeto */
   --hover-radius: 2rem;       /* hover dos cards */
@@ -78,7 +78,9 @@ Dois estilos de display convivem no modelo de referência:
 
 | Classe                | Tamanho (desktop)         | Fonte / peso          | Uso                                  |
 |-----------------------|---------------------------|-----------------------|--------------------------------------|
-| `.text-marquee`       | clamp(5rem, 16vw, 18rem)  | Geist 900, uppercase  | Nome gigante repetido (Hero/footer band) |
+| `.text-marquee`       | clamp(5rem, 16vw, 18rem)  | Geist 900, uppercase  | Nome gigante repetido (banner topo/footer) |
+| `.text-nav-logo`      | clamp(2rem, 4vw, 3.25rem) | Geist 900, uppercase  | Logo "LAIN" no navbar (+2rem sobre o anterior) |
+| `.text-nav-link`      | clamp(1.125rem, 1.5vw, 2rem) | Geist 400          | Links do navbar (+1rem sobre o anterior) |
 | `.text-huge-hero`     | clamp(4rem, 12vw, 14rem)  | Instrument Serif      | Títulos editoriais grandes           |
 | `.text-large-heading` | clamp(2rem, 5vw, 4rem)    | Instrument Serif      | "Latest blogs", título de papel      |
 | `.text-card-title`    | clamp(1.25rem, 2vw, 2rem) | Geist 800, uppercase  | Títulos de project/blog/service card |
@@ -122,112 +124,94 @@ Dois estilos de display convivem no modelo de referência:
 | tablet  | 768px     | 6       | 1.25rem |
 | desktop | 1024px    | 12      | 1.5rem  |
 
-### Container e shell fixo
+### Container e espaçamento de bordas
+
+Layout **full-bleed**: os elementos ficam próximos às bordas da tela, com **no máximo 4rem** de respiro até a borda da viewport (esquerda/direita/topo/base). Não há `max-width` central — o conteúdo ocupa a largura total com apenas o `--edge-padding` lateral.
 
 ```css
-:root {
-  --edge-padding: clamp(1rem, 3vw, 4rem); /* máx. 4rem da borda da viewport */
-  --nav-height: 7.5rem;
-  --footer-height: 20rem;
-}
-
 .content-container {
   width: 100%;
-  max-width: var(--content-max-width);
-  margin-inline: auto;
-  padding-inline: var(--edge-padding);
-}
-
-.site-main {
-  padding-top: var(--nav-height);
-  padding-bottom: var(--footer-height);
+  padding-inline: var(--edge-padding); /* clamp(1rem, 5vw, 4rem) */
 }
 ```
 
-| Regra | Detalhe |
-|-------|---------|
-| **Margem de borda** | Máximo **4rem** entre qualquer elemento e a borda da viewport (left/right/top/bottom) via `--edge-padding` |
-| **Header** | Navbar `fixed top-0`, z-alto — conteúdo rola **por baixo** dela |
-| **Footer** | Bloco accent + faixa do nome `fixed bottom-0`, z-alto — conteúdo rola **por baixo** dele |
-| **Marquee de página** | Full-bleed, dentro de `.site-main`, rola com o conteúdo (componente `<PageMarquee />`) |
-| **Seções** | `.section-spacing` → `padding-block: clamp(2rem, 5vw, 4rem)` |
+O **nome gigante (banner)** e o **bloco do footer** também respeitam o `--edge-padding`, sangrando até próximo da borda.
 
-O **marquee de título** e o **bloco do footer** sangram até a borda da viewport (full-bleed), usando `px-[var(--edge-padding)]` nas bordas laterais.
+### Camadas fixas (header/footer) e scroll
+
+O nome gigante do topo e o footer ficam **fixos** enquanto a página rola por cima:
+
+```css
+/* Conteúdo que rola POR CIMA das camadas fixas */
+.page-surface { position: relative; z-index: 10; background: var(--background); }
+```
+
+| Camada            | Posição                     | z-index | Comportamento |
+|-------------------|-----------------------------|---------|---------------|
+| **Navbar**        | `sticky top-0`              | 50      | Sempre visível no topo |
+| **Banner (nome)** | `sticky top-0`              | 0       | Pinado no topo; coberto pelo conteúdo ao rolar |
+| **`.page-surface`** | `relative`                | 10      | Conteúdo opaco que sobe por cima do banner e do footer |
+| **Footer**        | `sticky bottom-0`           | 0       | Pinado na base; revelado ao chegar ao fim |
+
+> Sem JS: o efeito "conteúdo rola por cima do nome fixo / footer revelado" é puro CSS (sticky + z-index + fundo opaco). Animações com scrub entram na Sprint 3.
 
 ---
 
-## Header (navbar fixa)
+## Header
 
-Referência: barra superior fina; logo à esquerda, status ao lado, nav à direita. **Fixa no topo** — o scroll passa por baixo dela.
+Referência: barra superior fina, fundo claro com borda inferior sutil; logo à esquerda, cluster central de status, nav à direita.
 
 ```
-┌──────────────────────────────────────────────────────────────────────┐  ← fixed top-0
+┌──────────────────────────────────────────────────────────────────────┐
 │ LAIN  lain.fork@gmail.com ✦ Disponível [mês ano]        Sobre Projetos Blog Contato │
 └──────────────────────────────────────────────────────────────────────┘
    └──────── grupo esquerdo ────────┘                      └──── nav (dir.) ────┘
-
-        L A I N   L A I N   L A I N   ← PageMarquee (rola com conteúdo, abaixo da navbar)
 ```
+
+Fiel ao modelo: **logo e status agrupados à esquerda**, nav à direita. Sem grupo central — isso evita o espaço extra que aparecia com 3 blocos espalhados (`justify-between` entre 3 grupos).
 
 | Elemento        | Conteúdo / estilo                                                        |
 |-----------------|--------------------------------------------------------------------------|
-| **Posição**     | `fixed inset-x-0 top-0`, z-50, fundo `background/90` + `backdrop-blur`, borda inferior `secondary/40` |
-| **Padding**     | horizontal = `--edge-padding` (máx. 4rem); vertical `py-4`               |
-| **Grupo esquerdo** | logo + cluster de status juntos (`gap-5`)                              |
-| **Logo**        | `.text-nav-logo` — **LAIN** uppercase, `calc(1.25rem + 2rem)` = **3.25rem**, Geist 900, cor `accent` |
+| **Posição**     | `sticky top-0`, `z-50`, fundo `background` opaco, borda inferior `secondary/40` — **sempre visível** durante o scroll, sobrepondo o banner e o conteúdo |
+| **Altura**      | padding vertical `py-6`, horizontal = `--edge-padding`                     |
+| **Grupo esquerdo** | logo + cluster de status juntos (`gap-6`)                              |
+| **Logo**        | "LAIN" — `.text-nav-logo` (Geist 900, **uppercase**, clamp(2rem→3.25rem)), cor `accent`, link para `/` |
 | **Status (lg+)**| email `mailto:` sublinhado + ✦ sparkle + "Disponível [mês ano]" em itálico `muted`. Oculto < lg |
-| **Nav (dir.)**  | `.text-nav-link` — `calc(1rem + 2rem)` = **3rem**, `muted` → `foreground` no hover, `gap-7`, `.link-underline` |
+| **Nav (dir.)**  | Links `.text-nav-link` (clamp(1.125rem→2rem)) `muted` → `foreground` no hover, `gap-8`, sublinhado animado (`.link-underline`) |
 | **Nav items**   | Sobre · Projetos · Blog · Contato                                        |
 
 - **Layout:** `justify-between` entre o **grupo esquerdo** e a **nav** — barra compacta, sem vão central.
 - **Mobile:** logo + link curto "Contato"; status e nav completa ocultos (< md/lg).
-- **Marquee:** removido do Header — cada rota usa `<PageMarquee />` no topo do conteúdo scrollável.
-- **Implementação:** Client Component (`Header.tsx`); email constante no componente.
-
-### PageMarquee (título de página)
-
-Componente reutilizável para o nome gigante no topo de cada rota:
-
-| Rota | Texto do marquee |
-|------|------------------|
-| `/` | `LAIN` (6× repetições) |
-| `/about` | `SOFTWARE ENGINEER` |
-| `/work` | `PROJETOS` |
-| `/work/[slug]` | título do projeto |
-| `/blog` | `BLOG ARCHIVE` |
-| `/blog/[slug]` | `BLOG` |
-| `/contact` | `CONTATO` |
-
-Classe `.text-marquee`, full-bleed com `px-[var(--edge-padding)]`, rola junto com `.site-main`.
+- **Implementação:** Server Component; o email do header é constante no componente (não vem de `site.json`).
 
 ---
 
-## Footer (fixo na base)
+## Footer
 
-Referência: bloco **full-bleed em accent** fixo na base da viewport. Conteúdo rola por baixo.
+Referência: bloco **full-bleed em accent** (no Lain, `#8F2F06` com texto `#F4F4F4`), com bloco de informações à esquerda, disponibilidade à direita, divisória, e duas colunas (nav + social). Logo abaixo, a **faixa do nome gigante** atravessa a tela.
 
 ```
-┌──────────────────────────  bloco accent (fixed bottom)  ───────────────┐
+┌──────────────────────────  bloco accent  ──────────────────────────────┐
 │ LAIN                                              Disponível [mês ano]    │
 │ Dias de trabalho                                  Tem um projeto em mente?│
 │ Segunda – Sexta                                   lain.fork@gmail.com     │
+│                                                                           │
 │ ───────────────────────────────────────────────────────────────────────│
-│ Sobre  Projetos  Blog  Contato          GitHub Instagram LinkedIn         │
+│ About  Work  Blog  Contact          GitHub Codepen Bluesky … LinkedIn RSS │
 └───────────────────────────────────────────────────────────────────────┘
-        L A I N   L A I N   (faixa `.text-marquee-footer`, compacta)
+        L A I N   L A I N   L A I N   (faixa marquee, accent sobre dark)
 ```
 
 | Zona                 | Conteúdo / estilo                                                       |
 |----------------------|-------------------------------------------------------------------------|
-| **Posição**          | `fixed inset-x-0 bottom-0`, z-50                                        |
-| **Padding lateral**  | `--edge-padding` (máx. 4rem)                                            |
-| **Fundo**            | `bg-accent`, texto `foreground`; padding vertical ~40–48px; full-bleed  |
-| **Topo esquerda**    | Logo "LAIN" uppercase + blocos info: label em **serif itálico** + valor em **serif** |
+| **Posição**          | `sticky bottom-0`, `z-0` — pinado na base; o conteúdo (`.page-surface`, z-10) rola por cima e o footer é **revelado** ao chegar ao fim da página |
+| **Fundo**            | `bg-accent`, texto `foreground`; padding vertical ~64px; full-bleed     |
+| **Topo esquerda**    | Logo "Lain" grande (serif/sans bold) + blocos info: label em **serif itálico** (`Dias de trabalho`) + valor em **serif** |
 | **Topo direita**     | "Disponível [mês ano]" em **serif grande**, "Tem um projeto em mente?" + email sublinhado; alinhado à direita |
-| **Divisória**        | linha 1px `foreground/30`                                               |
-| **Base esquerda**    | Nav (Sobre · Projetos · Blog · Contato) em **serif**                    |
-| **Base direita**     | Social links de `content/site.json` (apenas os não-nulos)               |
-| **Faixa do nome**    | `.text-marquee-footer` (compacto), cor `accent` sobre `background`      |
+| **Divisória**        | linha 1px `foreground/30` ocupando a largura                            |
+| **Base esquerda**    | Nav (About · Work · Blog · Contact) em **serif**                        |
+| **Base direita**     | Social links de `content/site.json` (apenas os não-nulos): GitHub, Codepen, Bluesky, Mastodon, Instagram, LinkedIn, RSS — **serif**, sublinhado no hover |
+| **Faixa do nome**    | "LAIN" repetido em `.text-marquee`, cor `accent` sobre `background`, abaixo do bloco (transição para o fim da página) |
 
 - **Layout colunas:** desktop 2 colunas (info esq. / disponibilidade dir.); base 2 colunas (nav esq. / social dir.). Mobile empilha tudo.
 - **Implementação:** Server Component; social com `rel="noopener noreferrer"` e `target="_blank"` para URLs externas.
@@ -238,20 +222,23 @@ Referência: bloco **full-bleed em accent** fixo na base da viewport. Conteúdo 
 
 Ordem das seções (topo → base), conforme screenshots:
 
-1. **Navbar** (fixed top)
-2. **PageMarquee** — nome/título da página (rola com conteúdo)
-3. **About / Intro**
+1. **Navbar** (sticky, sempre visível)
+2. **Banner — nome gigante "LAIN"** (sticky, fixo atrás do conteúdo)
+3. **About / Intro** _(início da `.page-surface`)_
 4. **Work — cards de projeto**
 5. **Latest blogs**
 6. **Services — cards inclinados**
-7. **Footer** (fixed bottom, sempre visível)
+7. **Footer + faixa do nome** (sticky, revelado no fim)
 
-### 1. PageMarquee — nome gigante
+> O mesmo padrão (banner fixo + `.page-surface` + footer revelado) se repete em **todas as páginas** (About, Projetos, Blog, posts, Contato). O banner mostra o título da página (ex.: "BLOG", "PROJETOS", "CONTATO") via o componente reutilizável `MarqueeBanner`.
 
-- Nome "LAIN" repetido em `.text-marquee` (≈6× na home), **accent** sobre `background`, full-bleed
-- Rola com o conteúdo — desaparece ao scrollar para cima, por baixo da navbar fixa
-- **Espaçamento:** `pt-[var(--edge-padding)]`, `pb-3` / `lg:pb-5`
-- **Animação (Sprint 3):** marquee/paralaxe horizontal
+### 1. Banner — nome/título gigante (`MarqueeBanner`)
+
+- Texto repetido em `.text-marquee` (≈6×), **accent** sobre `background`, ocupando a largura total
+- `sticky top-0`, `z-0`: fica **fixo** no topo enquanto a `.page-surface` (z-10, fundo opaco) rola por cima — o nome não é empurrado, é coberto
+- A navbar (`z-50`) permanece acima do banner durante todo o scroll
+- Acessibilidade: na home expõe um `<h1>` (sr-only) com o nome do site; nas páginas internas, com o título da página
+- **Animação (Sprint 3):** marquee/paralaxe horizontal (translateX scrubbed) e/ou cópias com leve rotação
 
 ### 2. About / Intro — 2 colunas
 
@@ -289,12 +276,11 @@ Home: título editorial + pílula "Todos os projetos", seguido do grid assimétr
 
 | Elemento        | Detalhe                                                                 |
 |-----------------|-------------------------------------------------------------------------|
-| **Card**        | Cantos `--card-radius`, **capa via `next/image`** (`object-cover`) + gradiente, título `.text-card-title` **branco** sobreposto na base |
-| **Capas reais** | `/public/*-project.png` (CrinaApp, NetAtlas, Vermolin.ux)               |
-| **Conteúdo card** | Capa + título (UPPERCASE) + ano e tags (stack) em `caps`              |
+| **Card**        | Cantos `--card-radius`, **capa em bloco de cor** (`accentColor`) + gradiente, título `.text-card-title` **branco** sobreposto na base (fotos dos projetos ficam para depois) |
+| **Conteúdo card** | Bloco de cor + título (UPPERCASE) + ano e tags (stack) em `caps`      |
 | **Pílula**      | "Todos os projetos" — borda `accent`, `caps`, `rounded-full`            |
-| **Hover**       | border-radius `--card-radius` → `--hover-radius` + scale leve da imagem |
-| **Dados**       | `getProjects()` — title, slug, year, tags (stack), coverImage, link     |
+| **Hover**       | border-radius `--card-radius` → `--hover-radius`                        |
+| **Dados**       | `getProjects()` — title, slug, year, tags (stack), accentColor, link    |
 | **Detalhe**     | `/work/[slug]`: capa, summary, tags e botão externo ("Acessar projeto" / "Ver repositório" se GitHub) |
 | **Animação (Sprint 3)** | entrada staggered (rotate ~3°, opacity 0→1, delay por índice)         |
 
@@ -346,13 +332,13 @@ Latest blogs   (heading serif, à esquerda)
 ## Componentes principais (resumo)
 
 ### Header
-Server Component. Logo accent + cluster de status (opcional) + nav serif à direita. Sticky com blur. Ver seção **Header** acima.
+Server Component. Logo "LAIN" (`.text-nav-logo`, uppercase) + cluster de status + nav (`.text-nav-link`) à direita. `sticky top-0 z-50`, fundo opaco. Ver seção **Header** acima.
 
-### Hero
-Client Component (`HeroMarquee`). Nome gigante repetido em `.text-marquee`. Animação de marquee/paralaxe na Sprint 3.
+### MarqueeBanner
+Server Component reutilizável. Nome/título gigante repetido em `.text-marquee`, `sticky top-0 z-0` (camada fixa do topo). Props: `text`, `repeat`, `asHeading`, `headingLabel`. Usado em todas as páginas. Animação de marquee/paralaxe na Sprint 3.
 
 ### ProjectCard
-Imagem full-bleed + título uppercase sobreposto, cantos arredondados grandes, hover de border-radius. Dados de `getProjects()`. Grid assimétrico.
+Bloco de cor (`accentColor`) + gradiente + título uppercase sobreposto, cantos arredondados grandes, hover de border-radius. Dados de `getProjects()`. Grid assimétrico.
 
 ### BlogCard
 Card com tint, data `caps`, tags, título `.text-card-title`, meta inferior. Dados de `getPosts()`.

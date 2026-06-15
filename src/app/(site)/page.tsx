@@ -1,8 +1,8 @@
-import { PageMarquee } from "@/components/ui/PageMarquee";
 import { About } from "@/components/sections/About";
 import { LatestBlog } from "@/components/sections/LatestBlog";
 import { Services } from "@/components/sections/Services";
 import { Work } from "@/components/sections/Work";
+import { MarqueeBanner } from "@/components/ui/MarqueeBanner";
 import { getSiteSettings } from "@/lib/content/site";
 
 export default function HomePage() {
@@ -10,11 +10,14 @@ export default function HomePage() {
 
   return (
     <>
-      <PageMarquee text={site.siteName} repeat={6} ariaLabel={site.siteName} />
-      <About />
-      <Work />
-      <LatestBlog />
-      <Services />
+      {/* Nome gigante fixo no topo; o conteúdo rola por cima dele. */}
+      <MarqueeBanner text={site.siteName} asHeading headingLabel={site.siteName} />
+      <div className="page-surface">
+        <About />
+        <Work />
+        <LatestBlog />
+        <Services />
+      </div>
     </>
   );
 }

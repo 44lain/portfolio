@@ -5,7 +5,7 @@ export function Services() {
   return (
     <section
       id="services"
-      className="content-container section-spacing"
+      className="content-container py-20 lg:py-28"
       aria-label="Serviços"
     >
       <div className="grid grid-cols-1 gap-[var(--grid-gap)] md:grid-cols-3">

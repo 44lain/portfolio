@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 
 const NAV_LINKS = [
@@ -16,24 +14,23 @@ type HeaderProps = {
   availability?: string;
 };
 
-// Navbar fixa no topo — o conteúdo (incl. marquee de página) rola por baixo dela.
-// Marquee de título fica em <PageMarquee /> dentro de cada rota.
+// Navbar fixa no topo (sticky top-0, z-50): permanece visível durante todo o scroll,
+// sobrepondo o nome gigante (MarqueeBanner) e o conteúdo que rola por baixo dela.
+// O logo fica em uppercase e maior; os nav links também aumentados (ver design-system).
 export function Header({
   siteName = "Lain",
   availability = "Disponível Jul 2026",
 }: HeaderProps) {
-  const displayName = siteName.toUpperCase();
-
   return (
-    <header className="fixed inset-x-0 top-0 z-50 border-b border-secondary/40 bg-background/90 backdrop-blur-sm">
-      <div className="mx-auto flex w-full max-w-[var(--content-max-width)] items-center justify-between gap-6 px-[var(--edge-padding)] py-4">
+    <header className="sticky top-0 z-50 border-b border-secondary/40 bg-background">
+      <div className="content-container flex items-center justify-between gap-6 py-6">
         {/* Grupo esquerdo: logo + status (email + disponibilidade) */}
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-6">
           <Link
             href="/"
             className="text-nav-logo text-accent transition-colors hover:text-hover"
           >
-            {displayName}
+            {siteName}
           </Link>
 
           <div className="hidden items-center gap-2 lg:flex">
@@ -51,7 +48,7 @@ export function Header({
         </div>
 
         {/* Nav à direita */}
-        <nav className="hidden items-center gap-7 md:flex" aria-label="Principal">
+        <nav className="hidden items-center gap-8 md:flex" aria-label="Principal">
           {NAV_LINKS.map(({ href, label }) => (
             <Link
               key={href}

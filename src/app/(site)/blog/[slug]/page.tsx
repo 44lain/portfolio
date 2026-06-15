@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { PageMarquee } from "@/components/ui/PageMarquee";
+import { MarqueeBanner } from "@/components/ui/MarqueeBanner";
 import { Pill, Tag } from "@/components/ui/Pill";
 import { getPostBySlug, getPosts } from "@/lib/content/mock";
 import { formatDate } from "@/lib/format";
@@ -33,28 +33,31 @@ export default async function PostPage({
 
   return (
     <>
-      <PageMarquee text="Blog" repeat={5} />
-      <article className="content-container section-spacing">
-        <div className="mb-8 flex flex-col gap-4">
-          <span className="caps text-muted">{formatDate(post.createdAt)}</span>
-          <h1 className="text-huge-hero text-foreground">{post.title}</h1>
-          <div className="flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
-              <Tag key={tag}>{tag}</Tag>
-            ))}
+      {/* Banner decorativo "Blog"; o título real é o h1 abaixo. */}
+      <MarqueeBanner text="Blog" />
+      <div className="page-surface">
+        <article className="content-container py-12 lg:py-16">
+          <div className="mb-8 flex flex-col gap-4">
+            <span className="caps text-muted">{formatDate(post.createdAt)}</span>
+            <h1 className="text-large-heading text-foreground">{post.title}</h1>
+            <div className="flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
+                <Tag key={tag}>{tag}</Tag>
+              ))}
+            </div>
           </div>
-        </div>
 
-        <p className="text-large-body max-w-2xl text-foreground/90">{post.excerpt}</p>
+          <p className="text-large-body max-w-2xl text-foreground/90">{post.excerpt}</p>
 
-        <p className="text-small-body mt-6 max-w-2xl text-muted">
-          Conteúdo completo do artigo chega na Sprint 2 (MDX).
-        </p>
+          <p className="text-small-body mt-6 max-w-2xl text-muted">
+            Conteúdo completo do artigo chega na Sprint 2 (MDX).
+          </p>
 
-        <div className="mt-12">
-          <Pill href="/blog">← Todos os posts</Pill>
-        </div>
-      </article>
+          <div className="mt-12">
+            <Pill href="/blog">← Todos os posts</Pill>
+          </div>
+        </article>
+      </div>
     </>
   );
 }
