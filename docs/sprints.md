@@ -69,10 +69,11 @@ Sprint 0 ──► Sprint 1 ──► Sprint 2 ──► Sprint 3 ──► Spri
 - [x] Grid responsivo: 12 cols desktop, 6 tablet, 1 mobile
 - [x] `<LinkHover />` markup estático (underline CSS, sem tooltip animado)
 - [x] `<ProjectCard />` com hover CSS (border-radius) e capa em bloco de cor (`accentColor`)
-- [x] Footer em fluxo normal (aparece 100% no fim) — bloco accent + faixa do nome conforme referência
-- [x] Header em fluxo normal (rola e cobre o banner) com logo "LAIN" uppercase ampliado e nav links ampliados
-- [x] Layout full-bleed: elementos próximos às bordas, respiro máx. 4rem (`--edge-padding`)
-- [x] Só o nome gigante é fixo; navbar e conteúdo (`.page-surface`) rolam por cima, em todas as páginas
+- [x] Footer em fluxo normal (aparece 100% no fim) — bloco accent + faixa do nome + marquee RTL
+- [x] Header sticky (`top-0 z-20`) — permanece visível ao rolar; logo "LAIN" uppercase + nav ampliados
+- [x] `.page-shell` opaco — banner fixo (z-0) + shell (navbar/main/footer) rola por cima
+- [x] Marquee animado (`MarqueeText`) — banner LTR, footer RTL
+- [x] Menu mobile funcional — portal CSS + touch (`MobileMenu`); Lenis + overflow lock
 - [x] Conteúdo alinhado ao perfil em `docs/skills.md`
 - [x] Conteúdo real integrado: papel "Software Engineer", foto e 3 projetos (CrinaApp, NetAtlas, Vermolin.ux)
 
@@ -136,7 +137,15 @@ Sprint 0 ──► Sprint 1 ──► Sprint 2 ──► Sprint 3 ──► Spri
 - [x] Timelines organizadas em `/animations` (`mobileMenu.ts`, `servicesStack.ts`)
 - [x] Integração Lenis ↔ ScrollTrigger (`useLenis(ScrollTrigger.update)` + `refresh()` por rota)
 - [x] `prefers-reduced-motion`: fallback estático (Services)
-- [x] **Menu mobile animado** (`MobileMenu`): botão grid, painel desliza de cima, nav serif + socials + contato (GSAP timeline)
+- [x] **Menu mobile** (`MobileMenu`): portal + transição CSS; touch confiável; GSAP stagger opcional (Sprint 3+)
+
+### Pendências conhecidas (pós-Sprint 1)
+
+- [ ] Stagger GSAP dos itens do menu mobile (opcional; CSS slide já entregue)
+- [ ] Animação marquee parallax no banner (Sprint 3)
+- [ ] Footer sticky reveal estilo referência (descartado — fluxo normal prioriza visibilidade)
+- [ ] Teste mobile real documentado (iOS Safari + Android Chrome) — Sprint 5
+- [ ] `allowedDevOrigins` para IP local — configurado em `next.config.ts` para dev (`10.0.0.101`)
 
 ### Critério de pronto
 

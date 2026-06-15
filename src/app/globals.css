@@ -11,6 +11,7 @@
   --grid-gap: 1.5rem;
   /* Espaçamento máximo entre qualquer elemento e a borda da viewport (item de layout). */
   --edge-padding: clamp(1rem, 5vw, 4rem);
+
   --border-radius: 0.75rem;
   --card-radius: 1.5rem;
   --hover-radius: 2rem;
@@ -42,12 +43,23 @@ body {
   padding-inline: var(--edge-padding);
 }
 
-/* Superfície de conteúdo que rola POR CIMA do nome gigante (banner) e do footer fixos.
-   z-index acima das camadas fixas (z-0) e fundo opaco para cobri-las durante o scroll. */
+/* Shell opaco: navbar sticky + conteúdo + footer rolam juntos por cima do banner fixo. */
+.page-shell {
+  position: relative;
+  z-index: 10;
+  isolation: isolate;
+}
+
+/* Superfície de conteúdo com fundo opaco (dentro do shell). */
 .page-surface {
   position: relative;
   z-index: 10;
   background: var(--background);
+}
+
+/* Faixa do nome gigante — altura de uma linha; overflow não vaza para a navbar/hero. */
+.route-banner {
+  max-height: calc(clamp(5rem, 16vw, 18rem) * 0.85 + 2.5rem);
 }
 
 /* Nome gigante (Hero / faixa do footer) — sans display pesado, uppercase */
@@ -152,5 +164,50 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .link-underline::after {
     transition: none;
+  }
+
+  .marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* --- Marquee / ticker (letreiro) --- */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.marquee-segment {
+  flex-shrink: 0;
+  padding-right: 0.15em;
+}
+
+/* Header: esquerda → direita */
+.marquee-track--ltr {
+  animation: marquee-ltr 40s linear infinite;
+}
+
+/* Footer: direita → esquerda */
+.marquee-track--rtl {
+  animation: marquee-rtl 40s linear infinite;
+}
+
+@keyframes marquee-ltr {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes marquee-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
   }
 }

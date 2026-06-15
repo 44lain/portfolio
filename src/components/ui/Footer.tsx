@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MarqueeText } from "@/components/ui/MarqueeText";
 import type { SiteSettings, SocialLinks } from "@/types/content";
 
 const NAV_LINKS = [
@@ -29,10 +30,9 @@ export function Footer({ site, availability = "Disponível a partir de Julho 202
   ).filter(([, url]) => Boolean(url));
 
   return (
-    // Footer em fluxo normal (z-10, fundo opaco): aparece 100% ao chegar ao fim da
-    // página, cobrindo o nome gigante fixo (RouteBanner) que fica atrás. mt-auto
-    // garante que ele fique colado na base em páginas curtas.
-    <footer className="sticky bottom-0 z-0">
+    // Fluxo normal + z-10: aparece ao rolar até o fim. Evitar sticky bottom-0 z-0 —
+    // ficava atrás do main (.page-surface) e sumia mesmo no scroll máximo.
+    <footer className="relative z-10 w-full bg-background">
       {/* Bloco accent full-bleed */}
       <div className="bg-accent text-foreground">
         <div className="content-container grid grid-cols-1 gap-12 py-16 lg:grid-cols-2 lg:py-20">
@@ -93,14 +93,14 @@ export function Footer({ site, availability = "Disponível a partir de Julho 202
         </div>
       </div>
 
-      {/* Faixa do nome gigante */}
+      {/* Faixa do nome gigante — letreiro direita → esquerda */}
       <div className="overflow-hidden bg-background py-6">
-        <div
-          aria-hidden="true"
-          className="text-marquee whitespace-nowrap px-[var(--edge-padding)] text-accent"
-        >
-          {`${site.siteName} `.repeat(4).trim()}
-        </div>
+        <MarqueeText
+          text={site.siteName}
+          direction="rtl"
+          repeat={4}
+          className="px-[var(--edge-padding)] text-accent"
+        />
       </div>
     </footer>
   );

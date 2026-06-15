@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ReactLenis, useLenis } from "lenis/react";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -23,6 +24,23 @@ function ScrollBridge() {
     lenis?.scrollTo(0, { immediate: true });
     ScrollTrigger.refresh();
   }, [pathname, lenis]);
+
+  // Recalcula altura do documento após paint — evita Lenis “travado” antes do footer.
+  useEffect(() => {
+    const refresh = () => {
+      lenis?.resize();
+      ScrollTrigger.refresh();
+    };
+
+    refresh();
+    window.addEventListener("load", refresh);
+    window.addEventListener("resize", refresh);
+
+    return () => {
+      window.removeEventListener("load", refresh);
+      window.removeEventListener("resize", refresh);
+    };
+  }, [lenis]);
 
   return null;
 }

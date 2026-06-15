@@ -12,11 +12,14 @@ export default function SiteLayout({
 
   return (
     <>
-      {/* Camada fixa do topo (nome gigante). Navbar e conteúdo rolam por cima. */}
+      {/* Banner fixo (z-0): única camada atrás. Shell opaco (z-10) rola por cima. */}
       <RouteBanner siteName={site.siteName} />
-      <Header siteName={site.siteName} socialLinks={site.socialLinks} />
-      <main className="page-surface flex-1">{children}</main>
-      <Footer site={site} />
+
+      <div className="page-shell relative z-10 bg-background">
+        <Header siteName={site.siteName} socialLinks={site.socialLinks} />
+        <main className="page-surface">{children}</main>
+        <Footer site={site} />
+      </div>
     </>
   );
 }

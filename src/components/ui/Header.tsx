@@ -17,9 +17,9 @@ type HeaderProps = {
   socialLinks?: SocialLinks;
 };
 
-// Navbar em fluxo normal (NÃO fixa): rola junto com o conteúdo e cobre o nome
-// gigante fixo (RouteBanner) ao rolar. z-10 + fundo opaco para encobrir o banner.
-// O logo fica em uppercase e maior; os nav links também aumentados (ver design-system).
+// Navbar dentro do .page-shell: sticky no topo ao rolar (mobile e desktop).
+// z-20 + fundo opaco cobre o banner fixo (z-0) enquanto o conteúdo (.page-surface) passa por baixo.
+// Sticky só funciona dentro do shell — não conflita com o MarqueeBanner (irmão anterior no DOM).
 export function Header({
   siteName = "Lain",
   availability = "Disponível Jul 2026",

@@ -139,21 +139,24 @@ O **nome gigante (banner)** e o **bloco do footer** também respeitam o `--edge-
 
 ### Camadas fixas (header/footer) e scroll
 
-**Apenas o nome gigante do topo (LAIN) é fixo.** É o elemento mais ao topo da página e fica pinado enquanto a navbar e o conteúdo rolam **por cima**, cobrindo-o. Navbar e footer ficam em fluxo normal.
+**Apenas o nome gigante do topo (LAIN) fica atrás (z-0).** A navbar é **sticky** dentro do `.page-shell` e permanece visível ao rolar; o conteúdo passa por baixo dela. O footer fica em fluxo normal no fim da página.
 
 ```css
 /* Conteúdo opaco que sobe por cima do banner fixo */
 .page-surface { position: relative; z-index: 10; background: var(--background); }
+
+/* Shell opaco: navbar + main + footer rolam juntos sobre o banner */
+.page-shell { position: relative; z-index: 10; isolation: isolate; }
 ```
 
 | Camada            | Posição                     | z-index | Comportamento |
 |-------------------|-----------------------------|---------|---------------|
-| **Banner (nome)** | `sticky top-0` (ÚNICA camada fixa) | 0 | Primeiro elemento; pinado no topo, coberto pela navbar + conteúdo ao rolar |
-| **Navbar**        | `relative` (fluxo normal)   | 10      | Rola junto com a página e cobre o banner; fundo opaco |
-| **`.page-surface`** (main) | `relative`         | 10      | Conteúdo opaco que sobe por cima do banner |
-| **Footer**        | `relative` (fluxo normal, `mt-auto`) | 10 | Aparece 100% ao chegar ao fim; fundo opaco cobre o banner |
+| **Banner (nome)** | `sticky top-0`              | 0 | Primeiro elemento; pinado no topo, coberto pelo shell ao rolar |
+| **Navbar**        | `sticky top-0` (no shell)   | 20 | Permanece visível ao rolar; fundo opaco cobre o banner |
+| **`.page-surface`** (main) | `relative`         | 10 | Conteúdo opaco; rola por baixo da navbar sticky |
+| **Footer**        | `relative` (fluxo normal)   | 10 | Aparece 100% ao chegar ao fim; fundo opaco cobre o banner |
 
-> Ordem no DOM: **banner → navbar → main → footer** (o banner precisa vir antes da navbar para ser o elemento mais ao topo). Sem JS: puro CSS (sticky + z-index + fundo opaco). Animações com scrub entram na Sprint 3.
+> Ordem no DOM: **banner → `.page-shell` (navbar → main → footer)**. Sem JS para camadas: sticky + z-index + fundo opaco.
 
 ---
 
@@ -172,7 +175,7 @@ Fiel ao modelo: **logo e status agrupados à esquerda**, nav à direita. Sem gru
 
 | Elemento        | Conteúdo / estilo                                                        |
 |-----------------|--------------------------------------------------------------------------|
-| **Posição**     | `relative`, `z-10`, fundo `background` opaco, borda inferior `secondary/40` — **fluxo normal** (não fixa): rola junto e cobre o banner |
+| **Posição**     | `sticky top-0`, `z-20`, fundo `background` opaco, borda inferior `secondary/40` — permanece visível ao rolar (mobile e desktop) |
 | **Altura**      | padding vertical `py-6`, horizontal = `--edge-padding`                     |
 | **Grupo esquerdo** | logo + cluster de status juntos (`gap-6`)                              |
 | **Logo**        | "LAIN" — `.text-nav-logo` (Geist 900, **uppercase**, clamp(2rem→3.25rem)), cor `accent`, link para `/` |
@@ -206,16 +209,12 @@ Visível apenas em `< md`. Botão com **ícone de grid 3×3** (cor `accent`) no 
 
 | Aspecto         | Especificação                                                            |
 |-----------------|--------------------------------------------------------------------------|
-| **Cobertura**   | `fixed inset-0 z-50`, fundo `accent` (`#8F2F06`), texto `foreground` (claro sobre laranja) |
-| **Abertura**    | painel desliza de cima para baixo (`yPercent -100 → 0`, `power3.out` ~0.5s); itens entram em cascata (`stagger`) logo após |
-| **Fechamento**  | mesma timeline em `reverse()`; ao terminar, `visibility: hidden` (não captura foco/clique) |
-| **Topo**        | logo "LAIN" (`.text-nav-logo`) + botão de fechar (ícone ✕)                |
-| **Navegação**   | links em **serif grande** (`.text-large-heading`), empilhados, centralizados verticalmente |
-| **Socials**     | label "Sociais:" + links de `site.socialLinks` (apenas não-nulos), `caps`, abrem em nova aba |
-| **Rodapé**      | disponibilidade (serif itálico) + email `mailto:`                        |
-| **Scroll lock** | `lenis.stop()` ao abrir / `lenis.start()` ao fechar                       |
-| **Acessibilidade** | `role="dialog"`, `aria-modal`, `aria-expanded`/`aria-controls` no botão; fecha com **Esc** e ao trocar de rota |
-| **Implementação** | Client Component; timeline em `/src/animations/mobileMenu.ts` (play/reverse) |
+| **Cobertura**   | Portal em `document.body`, `fixed inset-0 z-[9999]`, fundo `accent`, transição CSS `translate-y` |
+| **Abertura**    | painel desliza de cima (`-translate-y-full → translate-y-0`, 500ms ease-out) |
+| **Fechamento**  | mesma transição invertida; `pointer-events-none` quando fechado |
+| **Touch**       | `onPointerUp` + `onClick`; `data-lenis-prevent-touch`; área de toque ampliada (`p-1`) |
+| **Scroll lock** | `lenis.stop()` + `body overflow hidden` ao abrir / reverte ao fechar |
+| **Implementação** | Client Component; sem GSAP (confiável em touch real). `mobileMenu.ts` legado — não usado |
 
 ---
 
@@ -364,10 +363,10 @@ Latest blogs   (heading serif, à esquerda)
 ## Componentes principais (resumo)
 
 ### Header
-Server Component. Logo "LAIN" (`.text-nav-logo`, uppercase) + cluster de status + nav (`.text-nav-link`) à direita. `relative z-10`, fundo opaco, **fluxo normal** (rola e cobre o banner). Em `< md`, renderiza o `MobileMenu`. Ver seção **Header** acima.
+Server Component. Logo "LAIN" (`.text-nav-logo`, uppercase) + cluster de status + nav (`.text-nav-link`) à direita. `sticky top-0 z-20`, fundo opaco. Em `< md`, renderiza o `MobileMenu`. Ver seção **Header** acima.
 
 ### MobileMenu
-Client Component (`< md`). Botão de grid 3×3 → painel fullscreen `accent` que desliza de cima. Nav serif grande + socials + contato. Timeline em `/animations/mobileMenu.ts`; trava o Lenis enquanto aberto; fecha com Esc / troca de rota. Ver seção **Menu mobile** acima.
+Client Component (`< md`). Botão grid 3×3 → painel fullscreen via portal (`z-[9999]`), transição CSS. Nav serif grande + socials + contato. Trava Lenis + overflow do body enquanto aberto; fecha com Esc / troca de rota. Ver seção **Menu mobile** acima.
 
 ### MarqueeBanner / RouteBanner
 `MarqueeBanner` (Server Component): nome/título gigante repetido em `.text-marquee`, `sticky top-0 z-0` (única camada fixa). Props: `text`, `repeat`, `asHeading`, `headingLabel`. `RouteBanner` (Client Component): escolhe o `text` pela rota (`usePathname`) e é renderizado no layout antes da navbar. Animação de marquee/paralaxe na Sprint 3.

@@ -1,12 +1,10 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
 import { useLenis } from "lenis/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { createMobileMenuTimeline } from "@/animations/mobileMenu";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { SocialLinks } from "@/types/content";
 
 const SOCIAL_LABELS: Record<keyof SocialLinks, string> = {
@@ -29,7 +27,6 @@ type MobileMenuProps = {
   socialLinks: SocialLinks;
 };
 
-// Ícone "grid de apps" (3×3) usado no botão de abrir o menu — padrão do modelo.
 function GridIcon() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -48,139 +45,156 @@ function CloseIcon() {
   );
 }
 
-// Menu mobile (apenas < md). Botão de grid no header; ao abrir, um painel desliza
-// de cima para baixo cobrindo a tela, com nav serif grande + socials + contato.
-// A timeline (slide + cascata) vive em /animations; aqui controlamos play/reverse.
+// Menu mobile (< md). Painel via portal em document.body (z-[9999]) + transição CSS —
+// evita stacking context do .page-shell e funciona em touch real (pointer + click).
 export function MobileMenu({ siteName, email, availability, navLinks, socialLinks }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<gsap.core.Timeline | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const skipPathnameCloseRef = useRef(true);
   const pathname = usePathname();
   const lenis = useLenis();
+  const lenisRef = useRef(lenis);
+
+  // Portal só no client (document.body indisponível no SSR).
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    lenisRef.current = lenis;
+  }, [lenis]);
 
   const activeSocials = (
     Object.entries(socialLinks) as [keyof SocialLinks, string | null | undefined][]
   ).filter(([, url]) => Boolean(url));
 
-  // Monta a timeline uma vez; o painel começa escondido acima da viewport.
-  useGSAP(
-    () => {
-      const panel = panelRef.current;
-      if (!panel) return;
-      const items = gsap.utils.toArray<HTMLElement>("[data-menu-item]", panel);
-      gsap.set(panel, { yPercent: -100, visibility: "hidden" });
-      const tl = createMobileMenuTimeline({ panel, items });
-      // Ao terminar de fechar (reverse), esconde para não capturar foco/cliques.
-      tl.eventCallback("onReverseComplete", () => gsap.set(panel, { visibility: "hidden" }));
-      timelineRef.current = tl;
-    },
-    { scope: containerRef },
-  );
+  const openMenu = useCallback(() => {
+    setIsOpen(true);
+    lenisRef.current?.stop();
+    document.body.style.overflow = "hidden";
+  }, []);
 
-  // Abre/fecha tocando a timeline e travando/destravando o scroll do Lenis.
-  useEffect(() => {
-    const tl = timelineRef.current;
-    if (!tl) return;
-    if (isOpen) {
-      tl.play();
-      lenis?.stop();
-    } else {
-      tl.reverse();
-      lenis?.start();
-    }
-  }, [isOpen, lenis]);
-
-  // Fecha ao trocar de rota (após clicar em um link).
-  useEffect(() => {
+  const closeMenu = useCallback(() => {
     setIsOpen(false);
-  }, [pathname]);
+    lenisRef.current?.start();
+    document.body.style.overflow = "";
+  }, []);
 
-  // Fecha com a tecla Escape.
+  // Fecha ao trocar de rota — ignora o mount inicial (pathname já setado na abertura).
+  useEffect(() => {
+    if (skipPathnameCloseRef.current) {
+      skipPathnameCloseRef.current = false;
+      return;
+    }
+    closeMenu();
+  }, [pathname, closeMenu]);
+
   useEffect(() => {
     if (!isOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsOpen(false);
+      if (event.key === "Escape") closeMenu();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [isOpen]);
+  }, [isOpen, closeMenu]);
+
+  const handleOpenPointer = (event: React.PointerEvent<HTMLButtonElement>) => {
+    // pointerup cobre touch; preventDefault evita ghost click duplicado em alguns browsers.
+    event.preventDefault();
+    event.stopPropagation();
+    openMenu();
+  };
 
   return (
-    <div ref={containerRef} className="md:hidden">
+    <div className="relative z-20 md:hidden">
       <button
         type="button"
-        onClick={() => setIsOpen(true)}
+        onClick={openMenu}
+        onPointerUp={handleOpenPointer}
         aria-label="Abrir menu"
         aria-expanded={isOpen}
         aria-controls="mobile-menu"
-        className="text-accent transition-colors hover:text-hover"
+        data-lenis-prevent
+        data-lenis-prevent-touch
+        className="relative z-20 touch-manipulation p-1 text-accent transition-colors hover:text-hover"
       >
         <GridIcon />
       </button>
 
-      <div
-        ref={panelRef}
-        id="mobile-menu"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Menu"
-        className="fixed inset-0 z-50 flex flex-col bg-accent text-foreground"
-      >
-        {/* Barra superior do painel: logo + botão de fechar */}
-        <div className="content-container flex items-center justify-between py-3">
-          <span className="text-nav-logo">{siteName}</span>
-          <button
-            type="button"
-            onClick={() => setIsOpen(false)}
-            aria-label="Fechar menu"
-            className="transition-opacity hover:opacity-70"
-          >
-            <CloseIcon />
-          </button>
-        </div>
-
-        {/* Navegação principal em serif grande */}
-        <nav className="content-container flex flex-1 flex-col justify-center gap-2" aria-label="Menu principal">
-          {navLinks.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              data-menu-item
-              className="text-large-heading w-fit text-foreground transition-colors hover:text-background"
+      {mounted
+        ? createPortal(
+            <div
+              id="mobile-menu"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menu"
+              aria-hidden={!isOpen}
+              data-lenis-prevent
+              data-lenis-prevent-touch
+              className={`fixed inset-0 z-[9999] flex flex-col bg-accent text-foreground transition-transform duration-500 ease-out ${
+                isOpen
+                  ? "pointer-events-auto translate-y-0"
+                  : "pointer-events-none -translate-y-full"
+              }`}
             >
-              {label}
-            </Link>
-          ))}
-        </nav>
-
-        {/* Rodapé do menu: socials + disponibilidade/contato */}
-        <div className="content-container flex flex-col gap-6 border-t border-foreground/30 py-8">
-          {activeSocials.length > 0 && (
-            <div data-menu-item className="flex flex-wrap items-center gap-x-5 gap-y-2">
-              <span className="caps text-foreground/70">Sociais:</span>
-              {activeSocials.map(([key, url]) => (
-                <a
-                  key={key}
-                  href={url!}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="link-underline caps"
+              <div className="content-container flex items-center justify-between py-3">
+                <span className="text-nav-logo">{siteName}</span>
+                <button
+                  type="button"
+                  onPointerUp={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    closeMenu();
+                  }}
+                  aria-label="Fechar menu"
+                  className="touch-manipulation p-1 transition-opacity hover:opacity-70"
                 >
-                  {SOCIAL_LABELS[key]}
-                </a>
-              ))}
-            </div>
-          )}
+                  <CloseIcon />
+                </button>
+              </div>
 
-          <div data-menu-item className="flex flex-col gap-1">
-            <span className="text-small-heading italic text-foreground/80">{availability}</span>
-            <a href={`mailto:${email}`} className="link-underline caps w-fit">
-              {email}
-            </a>
-          </div>
-        </div>
-      </div>
+              <nav className="content-container flex flex-1 flex-col justify-center gap-2" aria-label="Menu principal">
+                {navLinks.map(({ href, label }) => (
+                  <Link
+                    key={href}
+                    href={href}
+                    className="text-large-heading w-fit text-foreground transition-colors hover:text-background"
+                    onClick={closeMenu}
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </nav>
+
+              <div className="content-container flex flex-col gap-6 border-t border-foreground/30 py-8">
+                {activeSocials.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                    <span className="caps text-foreground/70">Sociais:</span>
+                    {activeSocials.map(([key, url]) => (
+                      <a
+                        key={key}
+                        href={url!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="link-underline caps"
+                      >
+                        {SOCIAL_LABELS[key]}
+                      </a>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex flex-col gap-1">
+                  <span className="text-small-heading italic text-foreground/80">{availability}</span>
+                  <a href={`mailto:${email}`} className="link-underline caps w-fit">
+                    {email}
+                  </a>
+                </div>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }

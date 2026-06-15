@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import { Instrument_Serif } from "next/font/google";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { getSiteSettings } from "@/lib/content/site";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -34,9 +35,9 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${geistSans.variable} ${instrumentSerif.variable} h-full`}
+      className={`${geistSans.variable} ${instrumentSerif.variable}`}
     >
-      <body className="flex min-h-full flex-col antialiased">
+      <body className="antialiased">
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
