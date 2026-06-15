@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { PageMarquee } from "@/components/ui/PageMarquee";
 import { About } from "@/components/sections/About";
 import { Services } from "@/components/sections/Services";
 
@@ -11,9 +12,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <section className="content-container py-16 lg:py-20">
-        <h1 className="text-huge-hero text-foreground">Sobre</h1>
-      </section>
+      <PageMarquee text="Software Engineer" repeat={3} ariaLabel="Sobre" />
       <About />
       <Services />
     </>

@@ -122,75 +122,112 @@ Dois estilos de display convivem no modelo de referência:
 | tablet  | 768px     | 6       | 1.25rem |
 | desktop | 1024px    | 12      | 1.5rem  |
 
-### Container
+### Container e shell fixo
 
 ```css
+:root {
+  --edge-padding: clamp(1rem, 3vw, 4rem); /* máx. 4rem da borda da viewport */
+  --nav-height: 7.5rem;
+  --footer-height: 20rem;
+}
+
 .content-container {
   width: 100%;
   max-width: var(--content-max-width);
   margin-inline: auto;
-  padding-inline: clamp(1rem, 4vw, 3rem);
+  padding-inline: var(--edge-padding);
+}
+
+.site-main {
+  padding-top: var(--nav-height);
+  padding-bottom: var(--footer-height);
 }
 ```
 
-O **nome gigante (marquee)** e o **bloco do footer** sangram até a borda da viewport (full-bleed), ignorando o container.
+| Regra | Detalhe |
+|-------|---------|
+| **Margem de borda** | Máximo **4rem** entre qualquer elemento e a borda da viewport (left/right/top/bottom) via `--edge-padding` |
+| **Header** | Navbar `fixed top-0`, z-alto — conteúdo rola **por baixo** dela |
+| **Footer** | Bloco accent + faixa do nome `fixed bottom-0`, z-alto — conteúdo rola **por baixo** dele |
+| **Marquee de página** | Full-bleed, dentro de `.site-main`, rola com o conteúdo (componente `<PageMarquee />`) |
+| **Seções** | `.section-spacing` → `padding-block: clamp(2rem, 5vw, 4rem)` |
+
+O **marquee de título** e o **bloco do footer** sangram até a borda da viewport (full-bleed), usando `px-[var(--edge-padding)]` nas bordas laterais.
 
 ---
 
-## Header
+## Header (navbar fixa)
 
-Referência: barra superior fina, fundo claro com borda inferior sutil; logo à esquerda, cluster central de status, nav à direita.
+Referência: barra superior fina; logo à esquerda, status ao lado, nav à direita. **Fixa no topo** — o scroll passa por baixo dela.
 
 ```
-┌──────────────────────────────────────────────────────────────────────┐
+┌──────────────────────────────────────────────────────────────────────┐  ← fixed top-0
 │ LAIN  lain.fork@gmail.com ✦ Disponível [mês ano]        Sobre Projetos Blog Contato │
 └──────────────────────────────────────────────────────────────────────┘
    └──────── grupo esquerdo ────────┘                      └──── nav (dir.) ────┘
-```
 
-Fiel ao modelo: **logo e status agrupados à esquerda**, nav à direita. Sem grupo central — isso evita o espaço extra que aparecia com 3 blocos espalhados (`justify-between` entre 3 grupos).
+        L A I N   L A I N   L A I N   ← PageMarquee (rola com conteúdo, abaixo da navbar)
+```
 
 | Elemento        | Conteúdo / estilo                                                        |
 |-----------------|--------------------------------------------------------------------------|
-| **Posição**     | `sticky top-0`, z-alto, fundo `background/90` + `backdrop-blur`, borda inferior `secondary/40` |
-| **Altura**      | compacta; padding vertical `py-3`, horizontal = container                 |
+| **Posição**     | `fixed inset-x-0 top-0`, z-50, fundo `background/90` + `backdrop-blur`, borda inferior `secondary/40` |
+| **Padding**     | horizontal = `--edge-padding` (máx. 4rem); vertical `py-4`               |
 | **Grupo esquerdo** | logo + cluster de status juntos (`gap-5`)                              |
-| **Logo**        | "Lain" — Geist **black** (`font-black`), `text-xl`, cor `accent`, link para `/` |
+| **Logo**        | `.text-nav-logo` — **LAIN** uppercase, `calc(1.25rem + 2rem)` = **3.25rem**, Geist 900, cor `accent` |
 | **Status (lg+)**| email `mailto:` sublinhado + ✦ sparkle + "Disponível [mês ano]" em itálico `muted`. Oculto < lg |
-| **Nav (dir.)**  | Links `muted` → `foreground` no hover, `gap-7`, sublinhado animado (`.link-underline`) |
+| **Nav (dir.)**  | `.text-nav-link` — `calc(1rem + 2rem)` = **3rem**, `muted` → `foreground` no hover, `gap-7`, `.link-underline` |
 | **Nav items**   | Sobre · Projetos · Blog · Contato                                        |
 
 - **Layout:** `justify-between` entre o **grupo esquerdo** e a **nav** — barra compacta, sem vão central.
 - **Mobile:** logo + link curto "Contato"; status e nav completa ocultos (< md/lg).
-- **Implementação:** Server Component; o email do header é constante no componente (não vem de `site.json`).
+- **Marquee:** removido do Header — cada rota usa `<PageMarquee />` no topo do conteúdo scrollável.
+- **Implementação:** Client Component (`Header.tsx`); email constante no componente.
+
+### PageMarquee (título de página)
+
+Componente reutilizável para o nome gigante no topo de cada rota:
+
+| Rota | Texto do marquee |
+|------|------------------|
+| `/` | `LAIN` (6× repetições) |
+| `/about` | `SOFTWARE ENGINEER` |
+| `/work` | `PROJETOS` |
+| `/work/[slug]` | título do projeto |
+| `/blog` | `BLOG ARCHIVE` |
+| `/blog/[slug]` | `BLOG` |
+| `/contact` | `CONTATO` |
+
+Classe `.text-marquee`, full-bleed com `px-[var(--edge-padding)]`, rola junto com `.site-main`.
 
 ---
 
-## Footer
+## Footer (fixo na base)
 
-Referência: bloco **full-bleed em accent** (no Lain, `#8F2F06` com texto `#F4F4F4`), com bloco de informações à esquerda, disponibilidade à direita, divisória, e duas colunas (nav + social). Logo abaixo, a **faixa do nome gigante** atravessa a tela.
+Referência: bloco **full-bleed em accent** fixo na base da viewport. Conteúdo rola por baixo.
 
 ```
-┌──────────────────────────  bloco accent  ──────────────────────────────┐
+┌──────────────────────────  bloco accent (fixed bottom)  ───────────────┐
 │ LAIN                                              Disponível [mês ano]    │
 │ Dias de trabalho                                  Tem um projeto em mente?│
 │ Segunda – Sexta                                   lain.fork@gmail.com     │
-│                                                                           │
 │ ───────────────────────────────────────────────────────────────────────│
-│ About  Work  Blog  Contact          GitHub Codepen Bluesky … LinkedIn RSS │
+│ Sobre  Projetos  Blog  Contato          GitHub Instagram LinkedIn         │
 └───────────────────────────────────────────────────────────────────────┘
-        L A I N   L A I N   L A I N   (faixa marquee, accent sobre dark)
+        L A I N   L A I N   (faixa `.text-marquee-footer`, compacta)
 ```
 
 | Zona                 | Conteúdo / estilo                                                       |
 |----------------------|-------------------------------------------------------------------------|
-| **Fundo**            | `bg-accent`, texto `foreground`; padding vertical ~64px; full-bleed     |
-| **Topo esquerda**    | Logo "Lain" grande (serif/sans bold) + blocos info: label em **serif itálico** (`Dias de trabalho`) + valor em **serif** |
+| **Posição**          | `fixed inset-x-0 bottom-0`, z-50                                        |
+| **Padding lateral**  | `--edge-padding` (máx. 4rem)                                            |
+| **Fundo**            | `bg-accent`, texto `foreground`; padding vertical ~40–48px; full-bleed  |
+| **Topo esquerda**    | Logo "LAIN" uppercase + blocos info: label em **serif itálico** + valor em **serif** |
 | **Topo direita**     | "Disponível [mês ano]" em **serif grande**, "Tem um projeto em mente?" + email sublinhado; alinhado à direita |
-| **Divisória**        | linha 1px `foreground/30` ocupando a largura                            |
-| **Base esquerda**    | Nav (About · Work · Blog · Contact) em **serif**                        |
-| **Base direita**     | Social links de `content/site.json` (apenas os não-nulos): GitHub, Codepen, Bluesky, Mastodon, Instagram, LinkedIn, RSS — **serif**, sublinhado no hover |
-| **Faixa do nome**    | "LAIN" repetido em `.text-marquee`, cor `accent` sobre `background`, abaixo do bloco (transição para o fim da página) |
+| **Divisória**        | linha 1px `foreground/30`                                               |
+| **Base esquerda**    | Nav (Sobre · Projetos · Blog · Contato) em **serif**                    |
+| **Base direita**     | Social links de `content/site.json` (apenas os não-nulos)               |
+| **Faixa do nome**    | `.text-marquee-footer` (compacto), cor `accent` sobre `background`      |
 
 - **Layout colunas:** desktop 2 colunas (info esq. / disponibilidade dir.); base 2 colunas (nav esq. / social dir.). Mobile empilha tudo.
 - **Implementação:** Server Component; social com `rel="noopener noreferrer"` e `target="_blank"` para URLs externas.
@@ -201,20 +238,20 @@ Referência: bloco **full-bleed em accent** (no Lain, `#8F2F06` com texto `#F4F4
 
 Ordem das seções (topo → base), conforme screenshots:
 
-1. **Header** (sticky)
-2. **Hero — nome gigante**
+1. **Navbar** (fixed top)
+2. **PageMarquee** — nome/título da página (rola com conteúdo)
 3. **About / Intro**
 4. **Work — cards de projeto**
 5. **Latest blogs**
 6. **Services — cards inclinados**
-7. **Footer + faixa do nome**
+7. **Footer** (fixed bottom, sempre visível)
 
-### 1. Hero — nome gigante (marquee)
+### 1. PageMarquee — nome gigante
 
-- Nome "LAIN" repetido em `.text-marquee` (≈6×), **accent** sobre `background`, ocupando largura total (full-bleed)
-- Como o nome é curto, repetir o suficiente para **preencher a largura** da tela (evita o nome flutuando em espaço vazio)
-- **Espaçamento enxuto** (`pt-8 pb-10` / `lg:pt-12 lg:pb-14`) — junto com `pt` reduzido do About, elimina o vão excessivo entre header e conteúdo
-- **Animação (Sprint 3):** marquee/paralaxe horizontal (translateX scrubbed) e/ou cópias com leve rotação; no original o nome desliza no scroll
+- Nome "LAIN" repetido em `.text-marquee` (≈6× na home), **accent** sobre `background`, full-bleed
+- Rola com o conteúdo — desaparece ao scrollar para cima, por baixo da navbar fixa
+- **Espaçamento:** `pt-[var(--edge-padding)]`, `pb-3` / `lg:pb-5`
+- **Animação (Sprint 3):** marquee/paralaxe horizontal
 
 ### 2. About / Intro — 2 colunas
 

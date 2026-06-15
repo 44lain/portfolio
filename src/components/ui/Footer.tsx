@@ -23,19 +23,20 @@ type FooterProps = {
   availability?: string;
 };
 
+// Footer fixo na base — o conteúdo da página rola por baixo dele.
 export function Footer({ site, availability = "Disponível a partir de Julho 2026" }: FooterProps) {
   const activeSocials = (
     Object.entries(site.socialLinks) as [keyof SocialLinks, string | null | undefined][]
   ).filter(([, url]) => Boolean(url));
 
   return (
-    <footer className="mt-auto">
+    <footer className="fixed inset-x-0 bottom-0 z-50">
       {/* Bloco accent full-bleed */}
       <div className="bg-accent text-foreground">
-        <div className="content-container grid grid-cols-1 gap-12 py-16 lg:grid-cols-2 lg:py-20">
+        <div className="mx-auto grid w-full max-w-[var(--content-max-width)] grid-cols-1 gap-8 px-[var(--edge-padding)] py-10 lg:grid-cols-2 lg:py-12">
           {/* Info — esquerda */}
-          <div className="flex flex-col gap-6">
-            <span className="text-large-heading">{site.siteName}</span>
+          <div className="flex flex-col gap-4">
+            <span className="text-large-heading uppercase">{site.siteName}</span>
             <div className="flex flex-col">
               <span className="text-small-heading italic text-foreground/80">
                 Dias de trabalho
@@ -45,7 +46,7 @@ export function Footer({ site, availability = "Disponível a partir de Julho 202
           </div>
 
           {/* Disponibilidade — direita */}
-          <div className="flex flex-col gap-3 lg:items-end lg:text-right">
+          <div className="flex flex-col gap-2 lg:items-end lg:text-right">
             <span className="text-large-heading">{availability}</span>
             <span className="text-small-heading text-foreground/80">
               Tem um projeto em mente?
@@ -60,8 +61,8 @@ export function Footer({ site, availability = "Disponível a partir de Julho 202
         </div>
 
         {/* Divisória + colunas */}
-        <div className="content-container border-t border-foreground/30 py-8">
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        <div className="mx-auto w-full max-w-[var(--content-max-width)] border-t border-foreground/30 px-[var(--edge-padding)] py-6">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <nav className="flex flex-wrap gap-x-6 gap-y-2" aria-label="Rodapé">
               {NAV_LINKS.map(({ href, label }) => (
                 <Link key={href} href={href} className="link-underline text-small-heading">
@@ -90,11 +91,11 @@ export function Footer({ site, availability = "Disponível a partir de Julho 202
         </div>
       </div>
 
-      {/* Faixa do nome gigante */}
-      <div className="overflow-hidden bg-background py-6">
+      {/* Faixa do nome gigante — parte do footer fixo */}
+      <div className="overflow-hidden bg-background py-4">
         <div
           aria-hidden="true"
-          className="text-marquee whitespace-nowrap px-[clamp(1rem,4vw,3rem)] text-accent"
+          className="text-marquee-footer whitespace-nowrap px-[var(--edge-padding)] text-accent"
         >
           {`${site.siteName} `.repeat(4).trim()}
         </div>

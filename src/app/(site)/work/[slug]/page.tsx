@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { PageMarquee } from "@/components/ui/PageMarquee";
 import { Pill, Tag } from "@/components/ui/Pill";
 import { getProjectBySlug, getProjects } from "@/lib/content/mock";
 
@@ -35,37 +36,40 @@ export default async function ProjectPage({
   if (!project) notFound();
 
   return (
-    <article className="content-container py-16 lg:py-20">
-      <div className="mb-8 flex flex-col gap-4">
-        <span className="caps text-muted">{project.year}</span>
-        <h1 className="text-huge-hero text-foreground">{project.title}</h1>
-        <div className="flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <Tag key={tag}>{tag}</Tag>
-          ))}
+    <>
+      <PageMarquee text={project.title} repeat={3} />
+      <article className="content-container section-spacing">
+        <div className="mb-8 flex flex-col gap-4">
+          <span className="caps text-muted">{project.year}</span>
+          <h1 className="text-huge-hero text-foreground">{project.title}</h1>
+          <div className="flex flex-wrap gap-2">
+            {project.tags.map((tag) => (
+              <Tag key={tag}>{tag}</Tag>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <div
-        className="mb-10 aspect-[16/9] w-full overflow-hidden rounded-card"
-        style={{ backgroundColor: project.accentColor ?? "var(--color-secondary)" }}
-      />
+        <div
+          className="mb-10 aspect-[16/9] w-full overflow-hidden rounded-card"
+          style={{ backgroundColor: project.accentColor ?? "var(--color-secondary)" }}
+        />
 
-      <p className="text-large-body max-w-2xl text-foreground/90">{project.summary}</p>
+        <p className="text-large-body max-w-2xl text-foreground/90">{project.summary}</p>
 
-      <div className="mt-12 flex flex-wrap gap-4">
-        {project.link && (
-          <a
-            href={project.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="caps inline-flex items-center justify-center rounded-full bg-accent px-6 py-3 text-foreground transition-colors hover:bg-hover"
-          >
-            {linkLabel(project.link)} ↗
-          </a>
-        )}
-        <Pill href="/work">← Todos os projetos</Pill>
-      </div>
-    </article>
+        <div className="mt-12 flex flex-wrap gap-4">
+          {project.link && (
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="caps inline-flex items-center justify-center rounded-full bg-accent px-6 py-3 text-foreground transition-colors hover:bg-hover"
+            >
+              {linkLabel(project.link)} ↗
+            </a>
+          )}
+          <Pill href="/work">← Todos os projetos</Pill>
+        </div>
+      </article>
+    </>
   );
 }

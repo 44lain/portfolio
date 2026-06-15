@@ -11,7 +11,7 @@ export function Work() {
   return (
     <section
       id="work"
-      className="content-container py-20 lg:py-28"
+      className="content-container section-spacing"
       aria-label="Projetos"
     >
       <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">

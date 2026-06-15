@@ -8,7 +8,7 @@ export function LatestBlog() {
   return (
     <section
       id="blog"
-      className="content-container py-20 lg:py-28"
+      className="content-container section-spacing"
       aria-label="Blog"
     >
       <div className="mb-12 flex items-end justify-between gap-6">
