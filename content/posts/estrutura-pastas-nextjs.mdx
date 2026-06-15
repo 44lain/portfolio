@@ -1,0 +1,14 @@
+---
+title: "A estrutura de pastas que uso em projetos Next.js"
+slug: "estrutura-pastas-nextjs"
+excerpt: "Como organizo componentes, rotas e lógica de negócio para manter o projeto escalável."
+tags: ["Next.js", "Arquitetura"]
+published: true
+createdAt: "2026-01-05"
+---
+
+Separo responsabilidades em camadas claras: `app/` só para rotas e layouts; `components/ui` para peças reutilizáveis; `components/sections` para blocos de página; `lib/` para dados, actions e utilitários; `types/` para contratos compartilhados.
+
+Conteúdo file-based fica em `content/` na raiz — nunca misturado com código React. Hooks client (`useLenis`, animações GSAP) ficam isolados em `hooks/` e `animations/` para não vazar `"use client"` para onde não precisa.
+
+A regra de ouro: se não é rota, não entra em `app/`. Se precisa de browser APIs, vira Client Component explícito. Essa disciplina mantém bundles menores e revisões de PR mais rápidas.

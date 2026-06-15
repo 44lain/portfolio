@@ -95,17 +95,17 @@ Sprint 0 ──► Sprint 1 ──► Sprint 2 ──► Sprint 3 ──► Spri
 
 ### Entregáveis
 
-- [ ] `content/site.json` com email, social links, tagline
-- [ ] 3–6 arquivos MDX em `content/projects/` com frontmatter completo
-- [ ] 2–4 arquivos MDX em `content/posts/`
-- [ ] Tipos em `src/types/content.ts`
-- [ ] Helpers: `getSiteSettings()`, `getProjects()`, `getProjectBySlug()`, `getPosts()`, `getPostBySlug()`
-- [ ] `gray-matter` para parse de frontmatter
-- [ ] Home e rotas `/work`, `/blog` consumindo dados reais via Server Components
-- [ ] Footer com social links de `site.json`
-- [ ] Imagens em `/public/images/` referenciadas no frontmatter
-- [ ] `generateStaticParams` para slugs MDX
-- [ ] Renderização MDX nas páginas de detalhe (`/work/[slug]`, `/blog/[slug]`)
+- [x] `content/site.json` com email, social links, tagline
+- [x] 3–6 arquivos MDX em `content/projects/` com frontmatter completo
+- [x] 2–4 arquivos MDX em `content/posts/` (9 posts migrados do mock)
+- [x] Tipos em `src/types/content.ts`
+- [x] Helpers: `getSiteSettings()`, `getProjects()`, `getProjectBySlug()`, `getPosts()`, `getPostBySlug()`
+- [x] `gray-matter` + `zod` para parse e validação de frontmatter
+- [x] Home e rotas `/work`, `/blog` consumindo dados reais via Server Components
+- [x] Footer com social links de `site.json`
+- [x] Imagens referenciadas no frontmatter (`/public/*.png` — migração para `/public/images/` opcional)
+- [x] `generateStaticParams` para slugs MDX
+- [x] Renderização MDX nas páginas de detalhe (`/work/[slug]`, `/blog/[slug]`)
 
 ### Critério de pronto
 

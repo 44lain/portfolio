@@ -1,0 +1,14 @@
+---
+title: "Criando um design system para projetos pessoais"
+slug: "design-system-projetos-pessoais"
+excerpt: "Como defino cores, tipografia e componentes reutilizáveis sem perder tempo."
+tags: ["Design", "Frontend"]
+published: true
+createdAt: "2026-02-19"
+---
+
+Em projetos pessoais, o design system nasce de **tokens CSS** — paleta, radius, espaçamento — documentados em um único arquivo (`globals.css` + `docs/design-system.md`). Tipografia: uma serif para títulos, uma sans para corpo e labels caps.
+
+Componentes começam pequenos: `Pill`, `Tag`, `LinkHover`, cards com variantes de cor. Não construo biblioteca completa antes da primeira página; extraio padrões depois de repetir markup três vezes.
+
+Responsividade entra nos tokens (`clamp`, `--edge-padding`) e no grid 12/6/1. Motion fica para uma sprint dedicada — base estática sólida primeiro.

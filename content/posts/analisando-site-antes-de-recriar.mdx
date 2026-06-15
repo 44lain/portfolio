@@ -1,0 +1,14 @@
+---
+title: "Como analiso um site antes de recriá-lo"
+slug: "analisando-site-antes-de-recriar"
+excerpt: "O processo que sigo para entender estrutura, performance e UX antes de começar do zero."
+tags: ["UX", "Análise"]
+published: true
+createdAt: "2026-03-08"
+---
+
+Antes de codar, capturo screenshots em mobile, tablet e desktop e anoto hierarquia tipográfica, ritmo vertical e pontos de interação (hover, scroll, transições). DevTools revela fontes, cores computadas e layout (grid/flex).
+
+Performance: Lighthouse + Network throttling. Acessibilidade: contraste, ordem de foco, landmarks. Só então traduzo para tokens e componentes — nunca copio pixels cegamente.
+
+Documentar decisões ("por que sticky aqui?", "por que parallax no hero?") evita retrabalho quando animações entram na sprint seguinte.

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { BlogCard } from "@/components/ui/BlogCard";
 import { PageContent } from "@/components/ui/PageContent";
-import { getPosts } from "@/lib/content/mock";
+import { getPosts } from "@/lib/content/posts";
 
 export const metadata: Metadata = {
   title: "Blog",

@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
+import { MdxContent } from "@/components/content/MdxContent";
 import { Pill, Tag } from "@/components/ui/Pill";
-import { getProjectBySlug, getProjects } from "@/lib/content/mock";
+import { getProjectBySlug, getProjects } from "@/lib/content/projects";
 
 type Params = { slug: string };
 
@@ -47,11 +49,26 @@ export default async function ProjectPage({
       </div>
 
       <div
-        className="mb-10 aspect-[16/9] w-full overflow-hidden rounded-card"
+        className="relative mb-10 aspect-[16/9] w-full overflow-hidden rounded-card"
         style={{ backgroundColor: project.accentColor ?? "var(--color-secondary)" }}
-      />
+      >
+        {project.coverImage && (
+          <Image
+            src={project.coverImage}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 1200px"
+            priority
+          />
+        )}
+      </div>
 
       <p className="text-large-body max-w-2xl text-foreground/90">{project.summary}</p>
+
+      <div className="mt-10 max-w-2xl">
+        <MdxContent source={project.content} />
+      </div>
 
       <div className="mt-12 flex flex-wrap gap-4">
         {project.link && (

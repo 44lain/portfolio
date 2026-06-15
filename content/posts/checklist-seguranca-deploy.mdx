@@ -1,0 +1,14 @@
+---
+title: "Checklist de segurança antes do deploy"
+slug: "checklist-seguranca-deploy"
+excerpt: "Itens essenciais de segurança que confiro antes de qualquer site ir para produção."
+tags: ["Segurança", "Checklist"]
+published: true
+createdAt: "2026-04-10"
+---
+
+Segurança em sites estáticos e JAMstack também importa. Confiro: nenhum segredo em repositório ou client bundle; variáveis sensíveis só no servidor; headers (`Content-Security-Policy`, `X-Frame-Options`) quando aplicável.
+
+Formulários: rate limit, validação server-side, sanitização de input. Dependências: `npm audit` e lockfile commitado. Domínio: HTTPS forçado, redirects corretos.
+
+Para APIs e Server Actions, princípio do menor privilégio em tokens e CORS restrito. Um checklist curto repetido em todo deploy evita o erro clássico de "é só um portfólio".

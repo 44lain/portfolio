@@ -1,6 +1,6 @@
 import { Pill } from "@/components/ui/Pill";
 import { ProjectCard } from "@/components/ui/ProjectCard";
-import { getProjects } from "@/lib/content/mock";
+import { getProjects } from "@/lib/content/projects";
 
 // Grid assimétrico (fiel ao modelo): 2 cards na primeira linha + 1 card largo na segunda.
 const SPANS = ["lg:col-span-7", "lg:col-span-5", "lg:col-span-12"];

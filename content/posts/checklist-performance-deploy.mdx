@@ -1,0 +1,14 @@
+---
+title: "Checklist de performance antes de colocar um site no ar"
+slug: "checklist-performance-deploy"
+excerpt: "Os pontos que verifico para garantir velocidade e boa experiência antes do lançamento."
+tags: ["Performance", "Checklist"]
+published: true
+createdAt: "2026-03-25"
+---
+
+Antes do deploy, passo por: imagens em formato moderno (WebP/AVIF) com `sizes` corretos; fontes com `display: swap` e subset quando possível; JavaScript client apenas onde necessário.
+
+Verifico LCP, CLS e INP no Lighthouse mobile; elimino layout shift em cards e hero; prefetch de rotas críticas. Cache headers e compressão na CDN (Vercel) são defaults, mas reviso assets estáticos grandes.
+
+Performance não é sprint final — é critério de merge. Cada PR que adiciona client bundle ou imagem pesada paga o imposto antes de ir para main.

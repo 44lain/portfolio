@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { MdxContent } from "@/components/content/MdxContent";
 import { Pill, Tag } from "@/components/ui/Pill";
-import { getPostBySlug, getPosts } from "@/lib/content/mock";
+import { getPostBySlug, getPosts } from "@/lib/content/posts";
 import { formatDate } from "@/lib/format";
 
 type Params = { slug: string };
@@ -44,9 +45,9 @@ export default async function PostPage({
 
       <p className="text-large-body max-w-2xl text-foreground/90">{post.excerpt}</p>
 
-      <p className="text-small-body mt-6 max-w-2xl text-muted">
-        Conteúdo completo do artigo chega na Sprint 2 (MDX).
-      </p>
+      <div className="mt-10 max-w-2xl">
+        <MdxContent source={post.content} />
+      </div>
 
       <div className="mt-12">
         <Pill href="/blog">← Todos os posts</Pill>

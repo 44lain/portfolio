@@ -1,6 +1,6 @@
 import { BlogCard } from "@/components/ui/BlogCard";
 import { Pill } from "@/components/ui/Pill";
-import { getPosts } from "@/lib/content/mock";
+import { getPosts } from "@/lib/content/posts";
 
 export function LatestBlog() {
   const posts = getPosts().slice(0, 6);
