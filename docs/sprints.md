@@ -59,7 +59,7 @@ Sprint 0 ──► Sprint 1 ──► Sprint 2 ──► Sprint 3 ──► Spri
 
 ### Entregáveis
 
-- [x] **Banner** — nome/título gigante fixo (`MarqueeBanner`, sticky) reutilizado em todas as páginas
+- [x] **Banner** — nome/título gigante fixo (`MarqueeBanner` + `RouteBanner`, sticky) como única camada fixa; navbar e conteúdo rolam por cima
 - [x] Seção **About** — bio, skills badges, foto com blob, badge de disponibilidade
 - [x] Seção **Work** — grid assimétrico de `<ProjectCard />` com dados mock (4 projetos)
 - [x] Seção **Blog** ("Latest blogs") — grid 3×2 de `<BlogCard />` com data, tags, excerpt
@@ -69,10 +69,10 @@ Sprint 0 ──► Sprint 1 ──► Sprint 2 ──► Sprint 3 ──► Spri
 - [x] Grid responsivo: 12 cols desktop, 6 tablet, 1 mobile
 - [x] `<LinkHover />` markup estático (underline CSS, sem tooltip animado)
 - [x] `<ProjectCard />` com hover CSS (border-radius) e capa em bloco de cor (`accentColor`)
-- [x] Footer **fixo** (sticky bottom-0, reveal) — bloco accent + faixa do nome conforme referência
-- [x] Header **fixo** (sticky top-0, sempre visível) com logo "LAIN" uppercase ampliado e nav links ampliados
+- [x] Footer em fluxo normal (aparece 100% no fim) — bloco accent + faixa do nome conforme referência
+- [x] Header em fluxo normal (rola e cobre o banner) com logo "LAIN" uppercase ampliado e nav links ampliados
 - [x] Layout full-bleed: elementos próximos às bordas, respiro máx. 4rem (`--edge-padding`)
-- [x] Camadas fixas (banner/footer) com conteúdo rolando por cima (`.page-surface`), aplicado a todas as páginas
+- [x] Só o nome gigante é fixo; navbar e conteúdo (`.page-surface`) rolam por cima, em todas as páginas
 - [x] Conteúdo alinhado ao perfil em `docs/skills.md`
 - [x] Conteúdo real integrado: papel "Software Engineer", foto e 3 projetos (CrinaApp, NetAtlas, Vermolin.ux)
 

@@ -139,21 +139,21 @@ O **nome gigante (banner)** e o **bloco do footer** também respeitam o `--edge-
 
 ### Camadas fixas (header/footer) e scroll
 
-O nome gigante do topo e o footer ficam **fixos** enquanto a página rola por cima:
+**Apenas o nome gigante do topo (LAIN) é fixo.** É o elemento mais ao topo da página e fica pinado enquanto a navbar e o conteúdo rolam **por cima**, cobrindo-o. Navbar e footer ficam em fluxo normal.
 
 ```css
-/* Conteúdo que rola POR CIMA das camadas fixas */
+/* Conteúdo opaco que sobe por cima do banner fixo */
 .page-surface { position: relative; z-index: 10; background: var(--background); }
 ```
 
 | Camada            | Posição                     | z-index | Comportamento |
 |-------------------|-----------------------------|---------|---------------|
-| **Navbar**        | `sticky top-0`              | 50      | Sempre visível no topo |
-| **Banner (nome)** | `sticky top-0`              | 0       | Pinado no topo; coberto pelo conteúdo ao rolar |
-| **`.page-surface`** | `relative`                | 10      | Conteúdo opaco que sobe por cima do banner e do footer |
-| **Footer**        | `sticky bottom-0`           | 0       | Pinado na base; revelado ao chegar ao fim |
+| **Banner (nome)** | `sticky top-0` (ÚNICA camada fixa) | 0 | Primeiro elemento; pinado no topo, coberto pela navbar + conteúdo ao rolar |
+| **Navbar**        | `relative` (fluxo normal)   | 10      | Rola junto com a página e cobre o banner; fundo opaco |
+| **`.page-surface`** (main) | `relative`         | 10      | Conteúdo opaco que sobe por cima do banner |
+| **Footer**        | `relative` (fluxo normal, `mt-auto`) | 10 | Aparece 100% ao chegar ao fim; fundo opaco cobre o banner |
 
-> Sem JS: o efeito "conteúdo rola por cima do nome fixo / footer revelado" é puro CSS (sticky + z-index + fundo opaco). Animações com scrub entram na Sprint 3.
+> Ordem no DOM: **banner → navbar → main → footer** (o banner precisa vir antes da navbar para ser o elemento mais ao topo). Sem JS: puro CSS (sticky + z-index + fundo opaco). Animações com scrub entram na Sprint 3.
 
 ---
 
@@ -172,7 +172,7 @@ Fiel ao modelo: **logo e status agrupados à esquerda**, nav à direita. Sem gru
 
 | Elemento        | Conteúdo / estilo                                                        |
 |-----------------|--------------------------------------------------------------------------|
-| **Posição**     | `sticky top-0`, `z-50`, fundo `background` opaco, borda inferior `secondary/40` — **sempre visível** durante o scroll, sobrepondo o banner e o conteúdo |
+| **Posição**     | `relative`, `z-10`, fundo `background` opaco, borda inferior `secondary/40` — **fluxo normal** (não fixa): rola junto e cobre o banner |
 | **Altura**      | padding vertical `py-6`, horizontal = `--edge-padding`                     |
 | **Grupo esquerdo** | logo + cluster de status juntos (`gap-6`)                              |
 | **Logo**        | "LAIN" — `.text-nav-logo` (Geist 900, **uppercase**, clamp(2rem→3.25rem)), cor `accent`, link para `/` |
@@ -204,7 +204,7 @@ Referência: bloco **full-bleed em accent** (no Lain, `#8F2F06` com texto `#F4F4
 
 | Zona                 | Conteúdo / estilo                                                       |
 |----------------------|-------------------------------------------------------------------------|
-| **Posição**          | `sticky bottom-0`, `z-0` — pinado na base; o conteúdo (`.page-surface`, z-10) rola por cima e o footer é **revelado** ao chegar ao fim da página |
+| **Posição**          | `relative`, `z-10`, `mt-auto` — fluxo normal; aparece **100%** ao chegar ao fim da página, cobrindo o banner fixo que fica atrás |
 | **Fundo**            | `bg-accent`, texto `foreground`; padding vertical ~64px; full-bleed     |
 | **Topo esquerda**    | Logo "Lain" grande (serif/sans bold) + blocos info: label em **serif itálico** (`Dias de trabalho`) + valor em **serif** |
 | **Topo direita**     | "Disponível [mês ano]" em **serif grande**, "Tem um projeto em mente?" + email sublinhado; alinhado à direita |
@@ -222,22 +222,21 @@ Referência: bloco **full-bleed em accent** (no Lain, `#8F2F06` com texto `#F4F4
 
 Ordem das seções (topo → base), conforme screenshots:
 
-1. **Navbar** (sticky, sempre visível)
-2. **Banner — nome gigante "LAIN"** (sticky, fixo atrás do conteúdo)
-3. **About / Intro** _(início da `.page-surface`)_
+1. **Banner — nome gigante "LAIN"** (ÚNICA camada fixa, atrás de tudo)
+2. **Navbar** (fluxo normal; rola e cobre o banner)
+3. **About / Intro** _(início da `.page-surface` = `main`)_
 4. **Work — cards de projeto**
 5. **Latest blogs**
 6. **Services — cards inclinados**
-7. **Footer + faixa do nome** (sticky, revelado no fim)
+7. **Footer + faixa do nome** (fluxo normal; aparece 100% no fim)
 
-> O mesmo padrão (banner fixo + `.page-surface` + footer revelado) se repete em **todas as páginas** (About, Projetos, Blog, posts, Contato). O banner mostra o título da página (ex.: "BLOG", "PROJETOS", "CONTATO") via o componente reutilizável `MarqueeBanner`.
+> O mesmo padrão (banner fixo + `.page-surface` + navbar/footer em fluxo) se repete em **todas as páginas**. O `RouteBanner` (client) escolhe o título do banner pela rota atual ("LAIN", "SOBRE", "PROJETOS", "BLOG", "CONTATO") usando o componente reutilizável `MarqueeBanner`.
 
-### 1. Banner — nome/título gigante (`MarqueeBanner`)
+### 1. Banner — nome/título gigante (`MarqueeBanner` via `RouteBanner`)
 
 - Texto repetido em `.text-marquee` (≈6×), **accent** sobre `background`, ocupando a largura total
-- `sticky top-0`, `z-0`: fica **fixo** no topo enquanto a `.page-surface` (z-10, fundo opaco) rola por cima — o nome não é empurrado, é coberto
-- A navbar (`z-50`) permanece acima do banner durante todo o scroll
-- Acessibilidade: na home expõe um `<h1>` (sr-only) com o nome do site; nas páginas internas, com o título da página
+- `sticky top-0`, `z-0`: **única camada fixa**. É o primeiro elemento do DOM (antes da navbar) e fica pinado enquanto a navbar (z-10) e a `.page-surface` (z-10, fundo opaco) rolam por cima e o cobrem — o nome não é empurrado, é coberto
+- Acessibilidade: na home/listagens expõe um `<h1>` (sr-only); nas páginas de detalhe o banner é decorativo e o `<h1>` real fica no conteúdo
 - **Animação (Sprint 3):** marquee/paralaxe horizontal (translateX scrubbed) e/ou cópias com leve rotação
 
 ### 2. About / Intro — 2 colunas
@@ -332,10 +331,10 @@ Latest blogs   (heading serif, à esquerda)
 ## Componentes principais (resumo)
 
 ### Header
-Server Component. Logo "LAIN" (`.text-nav-logo`, uppercase) + cluster de status + nav (`.text-nav-link`) à direita. `sticky top-0 z-50`, fundo opaco. Ver seção **Header** acima.
+Server Component. Logo "LAIN" (`.text-nav-logo`, uppercase) + cluster de status + nav (`.text-nav-link`) à direita. `relative z-10`, fundo opaco, **fluxo normal** (rola e cobre o banner). Ver seção **Header** acima.
 
-### MarqueeBanner
-Server Component reutilizável. Nome/título gigante repetido em `.text-marquee`, `sticky top-0 z-0` (camada fixa do topo). Props: `text`, `repeat`, `asHeading`, `headingLabel`. Usado em todas as páginas. Animação de marquee/paralaxe na Sprint 3.
+### MarqueeBanner / RouteBanner
+`MarqueeBanner` (Server Component): nome/título gigante repetido em `.text-marquee`, `sticky top-0 z-0` (única camada fixa). Props: `text`, `repeat`, `asHeading`, `headingLabel`. `RouteBanner` (Client Component): escolhe o `text` pela rota (`usePathname`) e é renderizado no layout antes da navbar. Animação de marquee/paralaxe na Sprint 3.
 
 ### ProjectCard
 Bloco de cor (`accentColor`) + gradiente + título uppercase sobreposto, cantos arredondados grandes, hover de border-radius. Dados de `getProjects()`. Grid assimétrico.

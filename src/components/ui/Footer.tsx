@@ -29,8 +29,9 @@ export function Footer({ site, availability = "Disponível a partir de Julho 202
   ).filter(([, url]) => Boolean(url));
 
   return (
-    // Footer fixo no rodapé (sticky bottom-0, z-0): o conteúdo (.page-surface, z-10)
-    // rola por cima e, ao chegar ao fim da página, "revela" o footer pinado embaixo.
+    // Footer em fluxo normal (z-10, fundo opaco): aparece 100% ao chegar ao fim da
+    // página, cobrindo o nome gigante fixo (RouteBanner) que fica atrás. mt-auto
+    // garante que ele fique colado na base em páginas curtas.
     <footer className="sticky bottom-0 z-0">
       {/* Bloco accent full-bleed */}
       <div className="bg-accent text-foreground">

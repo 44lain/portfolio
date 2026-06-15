@@ -9,9 +9,9 @@ type MarqueeBannerProps = {
   headingLabel?: string;
 };
 
-// Faixa do nome/título gigante fixada no topo (sticky top-0, z-0).
-// O conteúdo da página (.page-surface, z-10) rola POR CIMA desta faixa, sem deslocá-la —
-// é a camada fixa do "header" descrita no design-system. A navbar (z-50) fica sempre acima.
+// Faixa do nome/título gigante fixada no topo (sticky top-0, z-0) — ÚNICA camada fixa.
+// É o primeiro elemento do DOM; a navbar e o conteúdo (.page-surface, z-10) rolam POR CIMA
+// e o cobrem, sem deslocá-lo. Ver "Camadas fixas" no design-system.
 export function MarqueeBanner({
   text,
   repeat = 6,

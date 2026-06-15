@@ -14,15 +14,15 @@ type HeaderProps = {
   availability?: string;
 };
 
-// Navbar fixa no topo (sticky top-0, z-50): permanece visível durante todo o scroll,
-// sobrepondo o nome gigante (MarqueeBanner) e o conteúdo que rola por baixo dela.
+// Navbar em fluxo normal (NÃO fixa): rola junto com o conteúdo e cobre o nome
+// gigante fixo (RouteBanner) ao rolar. z-10 + fundo opaco para encobrir o banner.
 // O logo fica em uppercase e maior; os nav links também aumentados (ver design-system).
 export function Header({
   siteName = "Lain",
   availability = "Disponível Jul 2026",
 }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-50 border-b border-secondary/40 bg-background">
+    <header className="sticky top-0 z-20 border-b border-secondary/40 bg-background">
       <div className="content-container flex items-center justify-between gap-6 py-6">
         {/* Grupo esquerdo: logo + status (email + disponibilidade) */}
         <div className="flex items-center gap-6">
