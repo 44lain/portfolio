@@ -1,95 +1,47 @@
-# Portfólio Lain
+<div align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=Share+Tech+Mono&size=18&duration=2500&pause=800&color=975025&center=true&vCenter=true&multiline=true&width=700&height=60&lines=%3E+PRESENT+DAY%2C+PRESENT+TIME...;%3E+HA%20HA%20HA...;%3E+NO%20MATTER%20WHERE%20YOU%20GO%2C;%3E+EVERYONE%20IS%20CONNECTED"/>
+</div>
 
-Portfólio pessoal em **Next.js 16** (App Router), com conteúdo file-based (MDX + JSON), animações GSAP/Lenis e View Transitions API.
+<img src="docs/readme-svgs/header-system-stats.svg" width="100%"/>
 
-Referência visual: [cydstumpel.nl](https://cydstumpel.nl/)
+<p align="center">
+  <img src="https://github-readme-streak-stats.herokuapp.com/?user=44lain&hide_border=true&ring=975025&fire=8F2F06&currStreakNum=F4F4F4&currStreakLabel=975025&sideNums=F4F4F4&sideLabels=975025&dates=8D8175&background=100A08&stroke=5A280D"/>
+</p>
 
-## Pré-requisitos
+<p align="center">
+  <img src="https://github-profile-summary-cards.vercel.app/api/cards/stats?username=44lain&theme=kacho_ga"/>
+  <img src="https://github-profile-summary-cards.vercel.app/api/cards/most-commit-language?username=44lain&theme=kacho_ga"/>
+</p>
 
-- Node.js 20.9+
-- npm
 
-## Setup local
+<img src="docs/readme-svgs/header-activity-graph.svg" width="100%"/>
 
-```bash
-git clone https://github.com/44lain/portfolio.git
-cd portfolio
-npm install
-cp .env.example .env.local
-```
+<p align="center">
+  <img src="https://github-readme-activity-graph.vercel.app/graph?username=44lain&bg_color=100A08&color=F4F4F4&line=975025&point=8F2F06&area=true&area_color=5A280D&hide_border=true"/>
+</p>
 
-Edite `.env.local` e defina `NEXT_PUBLIC_SITE_URL` (ex.: `http://localhost:3000` em dev).
 
-```bash
-npm run dev
-```
+<img src="docs/readme-svgs/header-tech-stack.svg" width="100%"/>
 
-Abra [http://localhost:3000](http://localhost:3000).
+<p align="center">
+  <img src="https://img.shields.io/badge/JavaScript-100A08?style=for-the-badge&logo=javascript&logoColor=975025"/>
+  <img src="https://img.shields.io/badge/TypeScript-100A08?style=for-the-badge&logo=typescript&logoColor=975025"/>
+  <img src="https://img.shields.io/badge/Java-100A08?style=for-the-badge&logo=openjdk&logoColor=975025"/>
+  <img src="https://img.shields.io/badge/Python-100A08?style=for-the-badge&logo=python&logoColor=975025"/>
+  <img src="https://img.shields.io/badge/Next.js-100A08?style=for-the-badge&logo=nextdotjs&logoColor=975025"/>
+  <img src="https://img.shields.io/badge/React-100A08?style=for-the-badge&logo=react&logoColor=975025"/>
+  <img src="https://img.shields.io/badge/React_Native-100A08?style=for-the-badge&logo=react&logoColor=975025"/>
+  <img src="https://img.shields.io/badge/Supabase-100A08?style=for-the-badge&logo=supabase&logoColor=975025"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-100A08?style=for-the-badge&logo=postgresql&logoColor=975025"/>
+  <img src="https://img.shields.io/badge/TailwindCSS-100A08?style=for-the-badge&logo=tailwindcss&logoColor=975025"/>
+  <img src="https://img.shields.io/badge/Linux-100A08?style=for-the-badge&logo=linux&logoColor=975025"/>
+  <img src="https://img.shields.io/badge/Git-100A08?style=for-the-badge&logo=git&logoColor=975025"/>
+  <img src="https://img.shields.io/badge/Figma-100A08?style=for-the-badge&logo=figma&logoColor=975025"/>
+  <img src="https://img.shields.io/badge/Cybersecurity-100A08?style=for-the-badge&logo=kalilinux&logoColor=975025"/>
+</p>
 
-## Scripts
+---
 
-| Comando         | Descrição                   |
-|-----------------|-----------------------------|
-| `npm run dev`   | Servidor de desenvolvimento |
-| `npm run build` | Build de produção           |
-| `npm run start` | Servidor de produção        |
-| `npm run lint`  | ESLint                      |
-
-## Estrutura do projeto
-
-```
-content/           → site.json, projects/*.mdx, posts/*.mdx
-public/            → imagens estáticas
-src/
-  app/             → rotas App Router, sitemap, robots
-  components/      → UI, seções, providers
-  animations/      → timelines GSAP
-  hooks/           → useViewTransition
-  lib/             → content, seo, navigation, motion
-  types/           → contratos TypeScript
-docs/              → design system, sprints, SEO, contato
-```
-
-## Conteúdo
-
-| Tipo     | Local                    |
-|----------|--------------------------|
-| Config   | `content/site.json`      |
-| Projetos | `content/projects/*.mdx` |
-| Posts    | `content/posts/*.mdx`    |
-| Imagens  | `public/`                |
-
-Novo arquivo MDX com `published: true` gera página automaticamente no build.
-
-## Contato
-
-A página `/contact` usa **mailto:** — botão CTA abre o app de e-mail do visitante. O e-mail vem de `content/site.json`. Detalhes em `docs/contact.md`.
-
-## Deploy (Vercel)
-
-1. Importe o repositório na [Vercel](https://vercel.com)
-2. Defina `NEXT_PUBLIC_SITE_URL` com a URL de produção
-3. Deploy automático a cada push em `main`
-
-## Documentação
-
-| Doc | Conteúdo |
-|-----|----------|
-| `docs/sprints.md` | Planejamento por sprint |
-| `docs/design-system.md` | Tokens, componentes, motion |
-| `docs/data-layer.md` | MDX, JSON, validação Zod |
-| `docs/view-transitions.md` | Navegação animada (Sprint 4) |
-| `docs/seo.md` | Metadata, sitemap, OG |
-| `docs/contact.md` | Fluxo mailto na página de contato |
-
-## Stack
-
-Next.js · React 19 · TypeScript · Tailwind v4 · GSAP · Lenis · gray-matter · Zod · next-mdx-remote
-
-## Variáveis de ambiente
-
-| Variável | Obrigatória | Uso |
-|----------|-------------|-----|
-| `NEXT_PUBLIC_SITE_URL` | Produção | URL canônica (sitemap, OG, robots) |
-
-Sem banco de dados. Sem secrets obrigatórios para o formulário de contato.
+<p align="center">
+  <img src="https://komarev.com/ghpvc/?username=44lain&style=for-the-badge&label=VISITORS&color=100A08&labelColor=975025"/>
+</p>
