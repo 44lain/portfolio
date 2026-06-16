@@ -5,7 +5,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const LAYER_COUNT = 6;
 
-// Offsets e rotações por camada — efeito de texto duplicado empilhado (referência cydstumpel.nl).
+// Offsets e rotações por camada — efeito de texto duplicado empilhado no hero.
 const LAYER_TRANSFORMS = [
   { x: -4, y: 6, rotate: -4, opacity: 0.12 },
   { x: 8, y: -3, rotate: 3, opacity: 0.18 },
