@@ -1,20 +1,20 @@
+import { CopyEmailButton } from "@/components/ui/CopyEmailButton";
 import { LinkHover } from "@/components/ui/LinkHover";
 import { MobileMenu } from "@/components/ui/MobileMenu";
 import { TransitionLink } from "@/components/ui/TransitionLink";
 import { NAV_LINKS } from "@/lib/nav";
 import type { SocialLinks } from "@/types/content";
 
-const HEADER_EMAIL = "lain.fork@gmail.com";
-
 type HeaderProps = {
   siteName?: string;
+  email?: string;
   availability?: string;
   socialLinks?: SocialLinks;
 };
 
-// Navbar sticky dentro do .page-shell — view-transition-name mantém o header fixo nas animações de rota.
 export function Header({
   siteName = "Lain",
+  email = "hello@example.com",
   availability = "Disponível Jul 2026",
   socialLinks = {},
 }: HeaderProps) {
@@ -31,12 +31,7 @@ export function Header({
           </TransitionLink>
 
           <div className="hidden items-center gap-2 lg:flex">
-            <a
-              href={`mailto:${HEADER_EMAIL}`}
-              className="link-underline text-small-body text-muted"
-            >
-              {HEADER_EMAIL}
-            </a>
+            <CopyEmailButton email={email} className="text-small-body text-muted" />
             <span aria-hidden="true" className="text-accent">
               ✦
             </span>
@@ -54,7 +49,7 @@ export function Header({
 
         <MobileMenu
           siteName={siteName}
-          email={HEADER_EMAIL}
+          email={email}
           availability={availability}
           navLinks={NAV_LINKS}
           socialLinks={socialLinks}

@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { getProjects } from "@/lib/content/projects";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Projetos",
   description: "Seleção de projetos de desenvolvimento web, mobile e segurança.",
-};
+  path: "/work",
+});
 
 export default function WorkPage() {
   const projects = getProjects();

@@ -13,7 +13,7 @@ export function ProjectCard({ project, className = "", ...linkProps }: ProjectCa
       href={`/work/${project.slug}`}
       transitionDirection="forward"
       {...linkProps}
-      className={`group relative flex flex-col justify-end overflow-hidden rounded-card transition-[border-radius] duration-500 hover:rounded-card-hover ${className}`}
+      className={`group relative flex flex-col justify-end overflow-hidden rounded-card transition-[border-radius] duration-500 hover:rounded-card-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${className}`}
       style={{ backgroundColor: project.accentColor ?? "var(--color-secondary)" }}
     >
       <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-background/10 to-transparent" />

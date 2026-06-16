@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { BlogCard } from "@/components/ui/BlogCard";
 import { PageContent } from "@/components/ui/PageContent";
 import { getPosts } from "@/lib/content/posts";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Blog",
   description: "Artigos sobre Next.js, animação, CSS e segurança.",
-};
+  path: "/blog",
+});
 
 export default function BlogPage() {
   const posts = getPosts();

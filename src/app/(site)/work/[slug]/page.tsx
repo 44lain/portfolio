@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { MdxContent } from "@/components/content/MdxContent";
 import { Pill, Tag } from "@/components/ui/Pill";
 import { getProjectBySlug, getProjects } from "@/lib/content/projects";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
 type Params = { slug: string };
 
@@ -19,10 +20,16 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = getProjectBySlug(slug);
   if (!project) return { title: "Projeto não encontrado" };
-  return { title: project.title, description: project.summary };
+
+  return buildPageMetadata({
+    title: project.title,
+    description: project.summary,
+    path: `/work/${project.slug}`,
+    ogImage: project.coverImage,
+    type: "article",
+  });
 }
 
-// Rótulo do link externo: repositório quando aponta para o GitHub, senão "Acessar projeto".
 function linkLabel(url: string): string {
   return url.includes("github.com") ? "Ver repositório" : "Acessar projeto";
 }
@@ -49,16 +56,16 @@ export default async function ProjectPage({
       </div>
 
       <div
-        className="relative mb-10 w-[50vw] overflow-hidden rounded-card"
+        className="relative mb-10 aspect-[16/9] w-full max-w-3xl overflow-hidden rounded-card"
         style={{ backgroundColor: project.accentColor ?? "var(--color-secondary)" }}
       >
         {project.coverImage && (
           <Image
             src={project.coverImage}
-            alt=""
+            alt={`Capa do projeto ${project.title}`}
+            fill
             className="object-cover"
-            width={1000}
-            height={1000}
+            sizes="(max-width: 768px) 100vw, 768px"
             priority
           />
         )}

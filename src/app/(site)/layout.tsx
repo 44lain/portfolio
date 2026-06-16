@@ -16,7 +16,7 @@ export default function SiteLayout({
       <RouteBanner siteName={site.siteName} />
 
       <div className="page-shell relative z-10 bg-background">
-        <Header siteName={site.siteName} socialLinks={site.socialLinks} />
+        <Header siteName={site.siteName} email={site.email} socialLinks={site.socialLinks} />
         <main className="page-surface">{children}</main>
         <Footer site={site} />
       </div>

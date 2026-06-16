@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfólio Lain
 
-## Getting Started
+Portfólio pessoal em **Next.js 16** (App Router), com conteúdo file-based (MDX + JSON), animações GSAP/Lenis e View Transitions API.
 
-First, run the development server:
+Referência visual: [cydstumpel.nl](https://cydstumpel.nl/)
+
+## Pré-requisitos
+
+- Node.js 20.9+
+- npm
+
+## Setup local
+
+```bash
+git clone https://github.com/44lain/portfolio.git
+cd portfolio
+npm install
+cp .env.example .env.local
+```
+
+Edite `.env.local` e defina `NEXT_PUBLIC_SITE_URL` (ex.: `http://localhost:3000` em dev).
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Comando        | Descrição              |
+|----------------|------------------------|
+| `npm run dev`  | Servidor de desenvolvimento |
+| `npm run build`| Build de produção      |
+| `npm run start`| Servidor de produção   |
+| `npm run lint` | ESLint                 |
 
-## Learn More
+## Conteúdo
 
-To learn more about Next.js, take a look at the following resources:
+| Tipo     | Local                    |
+|----------|--------------------------|
+| Config   | `content/site.json`      |
+| Projetos | `content/projects/*.mdx` |
+| Posts    | `content/posts/*.mdx`    |
+| Imagens  | `public/`                |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Novo arquivo MDX com `published: true` gera página automaticamente no build.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Formulário de contato
 
-## Deploy on Vercel
+Configure **uma** das opções em `.env.local`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **n8n** — `N8N_CONTACT_WEBHOOK_URL` (POST JSON com `name`, `email`, `message`)
+2. **Resend** — `RESEND_API_KEY` + `CONTACT_EMAIL`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Sem variáveis, o formulário valida os campos mas orienta o uso do e-mail direto.
+
+## Deploy (Vercel)
+
+1. Importe o repositório na [Vercel](https://vercel.com)
+2. Defina `NEXT_PUBLIC_SITE_URL` com a URL de produção
+3. Configure webhook ou Resend se quiser formulário ativo
+4. Deploy automático a cada push em `main`
+
+## Documentação
+
+- `docs/sprints.md` — planejamento por sprint
+- `docs/design-system.md` — tokens e componentes
+- `docs/data-layer.md` — MDX/JSON
+- `docs/view-transitions.md` — navegação animada
+- `docs/seo.md` — SEO e metadata
+
+## Stack
+
+Next.js · React 19 · TypeScript · Tailwind v4 · GSAP · Lenis · gray-matter · Zod · next-mdx-remote

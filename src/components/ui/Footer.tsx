@@ -1,4 +1,5 @@
 import { MarqueeText } from "@/components/ui/MarqueeText";
+import { CopyEmailButton } from "@/components/ui/CopyEmailButton";
 import { TransitionLink } from "@/components/ui/TransitionLink";
 import { NAV_LINKS } from "@/lib/nav";
 import { SOCIAL_LABELS } from "@/lib/social";
@@ -33,12 +34,10 @@ export function Footer({ site, availability = "Disponível a partir de Julho 202
             <span className="text-small-heading text-foreground/80">
               Tem um projeto em mente?
             </span>
-            <a
-              href={`mailto:${site.email}`}
-              className="link-underline text-small-heading w-fit"
-            >
-              {site.email}
-            </a>
+            <CopyEmailButton
+              email={site.email}
+              className="text-small-heading w-fit text-foreground"
+            />
           </div>
         </div>
 

@@ -4,6 +4,7 @@ import { MdxContent } from "@/components/content/MdxContent";
 import { Pill, Tag } from "@/components/ui/Pill";
 import { getPostBySlug, getPosts } from "@/lib/content/posts";
 import { formatDate } from "@/lib/format";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
 type Params = { slug: string };
 
@@ -19,7 +20,14 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) return { title: "Post não encontrado" };
-  return { title: post.title, description: post.excerpt };
+
+  return buildPageMetadata({
+    title: post.title,
+    description: post.excerpt,
+    path: `/blog/${post.slug}`,
+    type: "article",
+    publishedTime: post.createdAt,
+  });
 }
 
 export default async function PostPage({
