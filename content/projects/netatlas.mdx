@@ -12,14 +12,54 @@ link: "https://netatlas.vercel.app"
 
 ## Contexto
 
-Redes domésticas e de pequenos escritórios crescem rápido, mas raramente têm inventário claro de dispositivos conectados. O NetAtlas nasceu para mapear hosts, serviços expostos e riscos básicos de forma visual e acessível.
+O NetAtlas nasceu da ideia de tornar a visibilidade de rede mais acessível. Embora existam diversas ferramentas para descoberta e monitoramento, muitas são excessivamente complexas, voltadas para ambientes corporativos ou exigem conhecimentos avançados para interpretar os resultados.
+
+O objetivo do projeto foi criar uma solução moderna e open source capaz de mapear dispositivos, identificar serviços expostos e destacar potenciais riscos de segurança através de uma experiência visual intuitiva.
 
 ## O que construí
 
-Combinei um **dashboard Next.js** com um **agente Python** que executa varreduras via **nmap**, normaliza resultados e envia para a interface. O foco foi tornar dados técnicos legíveis para quem não vive no terminal o dia inteiro.
+Desenvolvi uma arquitetura composta por dois componentes principais:
+
+* **NetAtlas Dashboard**: aplicação web construída com Next.js, TypeScript e Supabase responsável pela visualização, autenticação e gerenciamento dos dados.
+* **NetAtlas Agent**: agente local desenvolvido em Python que realiza a descoberta de dispositivos, varredura de portas e coleta de informações da rede utilizando Nmap.
+
+Os dados coletados pelo agente são processados e enviados para a plataforma, onde são transformados em inventários, métricas históricas e análises de segurança acionáveis.
 
 ## Destaques técnicos
 
-- Inventário de hosts com histórico de varreduras
-- Agente local desacoplado da UI (comunicação via API)
-- Insights de segurança com priorização de alertas simples
+* Descoberta automática de dispositivos em redes locais
+* Inventário centralizado com histórico de varreduras
+* Identificação de serviços e portas expostas
+* Motor de classificação de riscos baseado em regras
+* Arquitetura desacoplada entre dashboard e agente
+* APIs seguras para comunicação entre os componentes
+* Autenticação e autorização utilizando Supabase Auth
+* Políticas RLS (Row Level Security) para isolamento de dados
+* Interface responsiva com foco em observabilidade e UX
+* Deploy automatizado com Vercel e GitHub Actions
+
+## Desafios
+
+Um dos principais desafios foi transformar informações técnicas de rede em uma experiência compreensível e útil para diferentes perfis de usuários.
+
+Também houve um cuidado especial com segurança e arquitetura, incluindo revisão de permissões, validação de acesso aos dados, proteção contra exposições indevidas e implementação de boas práticas inspiradas no OWASP Top 10.
+
+## Tecnologias
+
+* Next.js
+* TypeScript
+* React
+* Supabase
+* PostgreSQL
+* Python
+* Nmap
+* Tailwind CSS
+* shadcn/ui
+* GitHub Actions
+* Vercel
+
+## Resultado
+
+O NetAtlas evoluiu de uma ideia experimental para uma plataforma funcional capaz de descobrir dispositivos, inventariar ativos de rede e fornecer visibilidade sobre possíveis riscos de segurança em ambientes domésticos, laboratórios e pequenas infraestruturas.
+
+O projeto permanece open source e continuará evoluindo com recursos de monitoramento contínuo, alertas e automações.

@@ -64,7 +64,7 @@ export default async function ProjectPage({
             src={project.coverImage}
             alt={`Capa do projeto ${project.title}`}
             fill
-            className="object-cover rounded-card border-2 border-foreground"
+            className="object-cover rounded-card border border-secondary shadow-lg"
             sizes="(max-width: 768px) 100vw, 768px"
             priority
           />

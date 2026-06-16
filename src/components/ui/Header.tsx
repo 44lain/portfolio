@@ -41,7 +41,7 @@ export function Header({
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Principal">
           {NAV_LINKS.map(({ href, label }) => (
-            <LinkHover key={href} href={href} tooltip={label} className="text-small-heading text-muted">
+            <LinkHover key={href} href={href} className="text-small-heading text-muted">
               {label}
             </LinkHover>
           ))}
