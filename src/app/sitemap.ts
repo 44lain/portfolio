@@ -3,6 +3,7 @@ import { getPosts } from "@/lib/content/posts";
 import { getProjects } from "@/lib/content/projects";
 import { absoluteUrl } from "@/lib/seo/url";
 
+// Gerado no build: rotas estáticas + slugs MDX publicados.
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPaths = ["/", "/about", "/work", "/blog", "/contact"];
 

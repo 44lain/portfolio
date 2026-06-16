@@ -40,3 +40,7 @@ Sem ela, o fallback em dev é `http://localhost:3000`.
 - Capa de projeto: `fill` + `sizes`, `max-w-3xl`
 - `Services`: `dynamic()` abaixo da dobra (home e about)
 - `prefers-reduced-motion` desativa animações pesadas
+
+## Contato
+
+Sem impacto em SEO além da rota `/contact` no sitemap. Fluxo mailto documentado em `docs/contact.md`.

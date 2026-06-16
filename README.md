@@ -28,12 +28,27 @@ Abra [http://localhost:3000](http://localhost:3000).
 
 ## Scripts
 
-| Comando        | Descrição              |
-|----------------|------------------------|
-| `npm run dev`  | Servidor de desenvolvimento |
-| `npm run build`| Build de produção      |
-| `npm run start`| Servidor de produção   |
-| `npm run lint` | ESLint                 |
+| Comando         | Descrição                   |
+|-----------------|-----------------------------|
+| `npm run dev`   | Servidor de desenvolvimento |
+| `npm run build` | Build de produção           |
+| `npm run start` | Servidor de produção        |
+| `npm run lint`  | ESLint                      |
+
+## Estrutura do projeto
+
+```
+content/           → site.json, projects/*.mdx, posts/*.mdx
+public/            → imagens estáticas
+src/
+  app/             → rotas App Router, sitemap, robots
+  components/      → UI, seções, providers
+  animations/      → timelines GSAP
+  hooks/           → useViewTransition
+  lib/             → content, seo, navigation, motion
+  types/           → contratos TypeScript
+docs/              → design system, sprints, SEO, contato
+```
 
 ## Conteúdo
 
@@ -46,30 +61,35 @@ Abra [http://localhost:3000](http://localhost:3000).
 
 Novo arquivo MDX com `published: true` gera página automaticamente no build.
 
-## Formulário de contato
+## Contato
 
-Configure **uma** das opções em `.env.local`:
-
-1. **n8n** — `N8N_CONTACT_WEBHOOK_URL` (POST JSON com `name`, `email`, `message`)
-2. **Resend** — `RESEND_API_KEY` + `CONTACT_EMAIL`
-
-Sem variáveis, o formulário valida os campos mas orienta o uso do e-mail direto.
+A página `/contact` usa **mailto:** — botão CTA abre o app de e-mail do visitante. O e-mail vem de `content/site.json`. Detalhes em `docs/contact.md`.
 
 ## Deploy (Vercel)
 
 1. Importe o repositório na [Vercel](https://vercel.com)
 2. Defina `NEXT_PUBLIC_SITE_URL` com a URL de produção
-3. Configure webhook ou Resend se quiser formulário ativo
-4. Deploy automático a cada push em `main`
+3. Deploy automático a cada push em `main`
 
 ## Documentação
 
-- `docs/sprints.md` — planejamento por sprint
-- `docs/design-system.md` — tokens e componentes
-- `docs/data-layer.md` — MDX/JSON
-- `docs/view-transitions.md` — navegação animada
-- `docs/seo.md` — SEO e metadata
+| Doc | Conteúdo |
+|-----|----------|
+| `docs/sprints.md` | Planejamento por sprint |
+| `docs/design-system.md` | Tokens, componentes, motion |
+| `docs/data-layer.md` | MDX, JSON, validação Zod |
+| `docs/view-transitions.md` | Navegação animada (Sprint 4) |
+| `docs/seo.md` | Metadata, sitemap, OG |
+| `docs/contact.md` | Fluxo mailto na página de contato |
 
 ## Stack
 
 Next.js · React 19 · TypeScript · Tailwind v4 · GSAP · Lenis · gray-matter · Zod · next-mdx-remote
+
+## Variáveis de ambiente
+
+| Variável | Obrigatória | Uso |
+|----------|-------------|-----|
+| `NEXT_PUBLIC_SITE_URL` | Produção | URL canônica (sitemap, OG, robots) |
+
+Sem banco de dados. Sem secrets obrigatórios para o formulário de contato.

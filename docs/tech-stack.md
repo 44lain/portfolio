@@ -213,10 +213,8 @@ Three.js: opcional via `dynamic()` em cards específicos.
 ## Variáveis de ambiente
 
 ```env
-# Opcional — Sprint 5 (formulário de contato)
-N8N_CONTACT_WEBHOOK_URL=
-RESEND_API_KEY=
-CONTACT_EMAIL=
+# URL canônica (produção) — sitemap, robots, Open Graph
+NEXT_PUBLIC_SITE_URL=https://seu-dominio.vercel.app
 ```
 
 Sem `DATABASE_URL` — não há banco.

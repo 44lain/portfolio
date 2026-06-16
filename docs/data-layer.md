@@ -191,17 +191,14 @@ Build-time static generation — sem ISR nem banco. Novo conteúdo = commit + re
 
 ## Formulário de contato
 
-Sem banco para mensagens. Opções:
+Sem backend. A página `/contact` oferece:
 
-1. **n8n webhook** — Server Action POST para workflow (recomendado)
-2. **Resend** — email transacional via API
+1. **CTA mailto** — botão abre o cliente de e-mail do visitante (`ContactCta`)
+2. **Copiar e-mail** — `CopyEmailButton` com feedback visual
 
-```env
-N8N_CONTACT_WEBHOOK_URL=https://...
-# ou
-RESEND_API_KEY=re_...
-CONTACT_EMAIL=hello@example.com
-```
+O endereço vem de `content/site.json` → campo `email`.
+
+Ver `docs/contact.md`.
 
 ---
 

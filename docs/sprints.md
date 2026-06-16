@@ -203,7 +203,7 @@ Sprint 0 ──► Sprint 1 ──► Sprint 2 ──► Sprint 3 ──► Spri
 - [ ] Lighthouse Performance ≥ 85, SEO ≥ 95, Accessibility ≥ 90 — validar em produção
 - [ ] Teste cross-browser: Chrome, Firefox, Safari — manual
 - [ ] Teste mobile real (iOS + Android) — manual
-- [x] Formulário de contato funcional (Server Action + n8n/Resend opcional)
+- [x] Contato via CTA mailto + copiar e-mail (`docs/contact.md`)
 - [ ] Deploy preview na Vercel — configurar no painel Vercel
 
 ### Critério de pronto
