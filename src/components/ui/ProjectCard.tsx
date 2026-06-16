@@ -1,18 +1,18 @@
-import Link from "next/link";
+import type { ComponentPropsWithoutRef } from "react";
+import { TransitionLink } from "@/components/ui/TransitionLink";
 import type { ProjectMeta } from "@/types/content";
 
 type ProjectCardProps = {
   project: ProjectMeta;
   className?: string;
-};
+} & Omit<ComponentPropsWithoutRef<typeof TransitionLink>, "href" | "className" | "children">;
 
-// Capa renderizada como bloco de cor (accentColor) + gradiente, com título sobreposto.
-// As fotos dos projetos não são usadas por enquanto — apenas as cores.
-// Hover anima o border-radius (--card-radius → --hover-radius).
-export function ProjectCard({ project, className = "" }: ProjectCardProps) {
+export function ProjectCard({ project, className = "", ...linkProps }: ProjectCardProps) {
   return (
-    <Link
+    <TransitionLink
       href={`/work/${project.slug}`}
+      transitionDirection="forward"
+      {...linkProps}
       className={`group relative flex flex-col justify-end overflow-hidden rounded-card transition-[border-radius] duration-500 hover:rounded-card-hover ${className}`}
       style={{ backgroundColor: project.accentColor ?? "var(--color-secondary)" }}
     >
@@ -28,6 +28,6 @@ export function ProjectCard({ project, className = "" }: ProjectCardProps) {
           ))}
         </div>
       </div>
-    </Link>
+    </TransitionLink>
   );
 }

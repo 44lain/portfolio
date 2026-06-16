@@ -81,7 +81,9 @@ export default async function ProjectPage({
             {linkLabel(project.link)} ↗
           </a>
         )}
-        <Pill href="/work">← Todos os projetos</Pill>
+        <Pill href="/work" transitionDirection="back">
+          ← Todos os projetos
+        </Pill>
       </div>
     </article>
   );

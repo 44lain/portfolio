@@ -1,5 +1,6 @@
 import { BlogCard } from "@/components/ui/BlogCard";
 import { Pill } from "@/components/ui/Pill";
+import { SectionHeading } from "@/components/ui/SectionHeading";
 import { getPosts } from "@/lib/content/posts";
 
 export function LatestBlog() {
@@ -12,7 +13,9 @@ export function LatestBlog() {
       aria-label="Blog"
     >
       <div className="mb-12 flex items-end justify-between gap-6">
-        <h2 className="text-large-heading text-foreground">Últimos posts</h2>
+        <SectionHeading className="text-large-heading text-foreground">
+          Últimos posts
+        </SectionHeading>
         <Pill href="/blog">Ver tudo</Pill>
       </div>
 

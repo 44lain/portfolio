@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { Instrument_Serif } from "next/font/google";
+import { Loader } from "@/components/ui/Loader";
 import { SmoothScroll } from "@/components/providers/SmoothScroll";
 import { getSiteSettings } from "@/lib/content/site";
 import "lenis/dist/lenis.css";
@@ -38,6 +39,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${instrumentSerif.variable}`}
     >
       <body className="antialiased">
+        <Loader siteName={site.siteName} />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>

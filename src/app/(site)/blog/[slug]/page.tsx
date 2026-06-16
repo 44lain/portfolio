@@ -50,7 +50,9 @@ export default async function PostPage({
       </div>
 
       <div className="mt-12">
-        <Pill href="/blog">← Todos os posts</Pill>
+        <Pill href="/blog" transitionDirection="back">
+          ← Todos os posts
+        </Pill>
       </div>
     </article>
   );

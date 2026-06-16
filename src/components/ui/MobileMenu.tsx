@@ -1,23 +1,13 @@
 "use client";
 
 import { useLenis } from "lenis/react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
+import { TransitionLink } from "@/components/ui/TransitionLink";
+import { SOCIAL_LABELS } from "@/lib/social";
+import type { NavLink } from "@/lib/nav";
 import type { SocialLinks } from "@/types/content";
-
-const SOCIAL_LABELS: Record<keyof SocialLinks, string> = {
-  github: "GitHub",
-  linkedin: "LinkedIn",
-  instagram: "Instagram",
-  codepen: "Codepen",
-  bluesky: "Bluesky",
-  mastodon: "Mastodon",
-  rss: "RSS",
-};
-
-type NavLink = { href: string; label: string };
 
 type MobileMenuProps = {
   siteName: string;
@@ -47,18 +37,18 @@ function CloseIcon() {
 
 // Menu mobile (< md). Painel via portal em document.body (z-[9999]) + transição CSS —
 // evita stacking context do .page-shell e funciona em touch real (pointer + click).
+// Portal só no client — useSyncExternalStore evita setState em effect.
+const subscribe = () => () => {};
+const getSnapshot = () => true;
+const getServerSnapshot = () => false;
+
 export function MobileMenu({ siteName, email, availability, navLinks, socialLinks }: MobileMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const skipPathnameCloseRef = useRef(true);
   const pathname = usePathname();
   const lenis = useLenis();
   const lenisRef = useRef(lenis);
-
-  // Portal só no client (document.body indisponível no SSR).
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     lenisRef.current = lenis;
@@ -155,14 +145,14 @@ export function MobileMenu({ siteName, email, availability, navLinks, socialLink
 
               <nav className="content-container flex flex-1 flex-col justify-center gap-2" aria-label="Menu principal">
                 {navLinks.map(({ href, label }) => (
-                  <Link
+                  <TransitionLink
                     key={href}
                     href={href}
                     className="text-large-heading w-fit text-foreground transition-colors hover:text-background"
                     onClick={closeMenu}
                   >
                     {label}
-                  </Link>
+                  </TransitionLink>
                 ))}
               </nav>
 

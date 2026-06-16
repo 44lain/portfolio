@@ -125,16 +125,16 @@ Sprint 0 ──► Sprint 1 ──► Sprint 2 ──► Sprint 3 ──► Spri
 
 ### Entregáveis
 
-- [ ] `<Loader />` com fade out no page load
-- [ ] Hero: texto duplicado (5–8 cópias) com rotações/offsets via GSAP timeline
-- [ ] ScrollTrigger paralaxe no título Hero (`scrub: true`)
-- [ ] Entrada staggered dos ProjectCards (rotate + opacity)
-- [ ] Background progress via `--bg-progress` no scroll
+- [x] `<Loader />` com fade out no page load
+- [x] Hero: texto duplicado (6 cópias) com rotações/offsets via GSAP timeline
+- [x] ScrollTrigger paralaxe no título Hero (`scrub: true`)
+- [x] Entrada staggered dos ProjectCards (rotate + opacity)
+- [x] Background progress via `--bg-progress` no scroll
 - [x] **Services — "cartas se juntando" no scroll** (ScrollTrigger `scrub`; espalhado → alinhado no grid)
-- [ ] Títulos de serviços/seções com texto duplicado e paralaxe
-- [ ] CSS Scroll-Driven Animations como progressive enhancement
+- [x] Títulos de seções Work/Blog com texto duplicado e paralaxe (`SectionHeading`)
+- [x] CSS Scroll-Driven Animations como progressive enhancement
 - [x] `gsap.matchMedia()` — animação de Services ativa só em ≥768px + sem reduced-motion
-- [x] Timelines organizadas em `/animations` (`mobileMenu.ts`, `servicesStack.ts`)
+- [x] Timelines organizadas em `/animations` (`servicesStack.ts`, `pageLoader.ts`, `heroMarquee.ts`, etc.)
 - [x] Integração Lenis ↔ ScrollTrigger (`useLenis(ScrollTrigger.update)` + `refresh()` por rota)
 - [x] `prefers-reduced-motion`: fallback estático (Services)
 - [x] **Menu mobile** (`MobileMenu`): portal + transição CSS; touch confiável; GSAP stagger opcional (Sprint 3+)
@@ -166,14 +166,14 @@ Sprint 0 ──► Sprint 1 ──► Sprint 2 ──► Sprint 3 ──► Spri
 
 ### Entregáveis
 
-- [ ] Hook `useViewTransition` + helper `navigateWithTransition()`
-- [ ] `app/template.tsx` configurado para View Transitions
-- [ ] CSS `@view-transition` rules para fade/slide entre páginas
-- [ ] Fallback GSAP crossfade para browsers sem suporte
-- [ ] Pausar Lenis + ScrollTrigger durante transição
-- [ ] `ScrollTrigger.refresh()` após cada navegação concluída
-- [ ] `<LinkHover />` tooltip animado (GSAP fade/scale) — desktop only
-- [ ] Transição funcional em `/work/[slug]` e `/blog/[slug]`
+- [x] Hook `useViewTransition` + helper `navigateWithTransition()`
+- [x] `app/(site)/template.tsx` configurado para View Transitions
+- [x] CSS `@view-transition` rules para fade/slide entre páginas
+- [x] Fallback GSAP crossfade para browsers sem suporte
+- [x] Pausar Lenis + ScrollTrigger durante transição
+- [x] `ScrollTrigger.refresh()` após cada navegação concluída
+- [x] `<LinkHover />` tooltip animado (GSAP fade/scale) — desktop only
+- [x] Transição funcional em `/work/[slug]` e `/blog/[slug]`
 
 ### Critério de pronto
 

@@ -1,10 +1,12 @@
-import Link from "next/link";
+import { TransitionLink } from "@/components/ui/TransitionLink";
+import type { TransitionDirection } from "@/lib/navigation";
 
 type PillProps = {
   children: React.ReactNode;
   href?: string;
   variant?: "outline" | "solid";
   className?: string;
+  transitionDirection?: TransitionDirection;
 };
 
 const base =
@@ -15,14 +17,20 @@ const variants = {
   solid: "bg-accent text-foreground hover:bg-hover",
 } as const;
 
-export function Pill({ children, href, variant = "outline", className = "" }: PillProps) {
+export function Pill({
+  children,
+  href,
+  variant = "outline",
+  className = "",
+  transitionDirection = "forward",
+}: PillProps) {
   const classes = `${base} ${variants[variant]} ${className}`.trim();
 
   if (href) {
     return (
-      <Link href={href} className={classes}>
+      <TransitionLink href={href} className={classes} transitionDirection={transitionDirection}>
         {children}
-      </Link>
+      </TransitionLink>
     );
   }
 

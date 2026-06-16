@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { TransitionLink } from "@/components/ui/TransitionLink";
 import { formatDate } from "@/lib/format";
 import type { PostMeta } from "@/types/content";
 
@@ -8,8 +8,9 @@ type BlogCardProps = {
 
 export function BlogCard({ post }: BlogCardProps) {
   return (
-    <Link
+    <TransitionLink
       href={`/blog/${post.slug}`}
+      transitionDirection="forward"
       className="group flex flex-col gap-4 rounded-[var(--border-radius)] border border-secondary/60 bg-secondary/15 p-6 transition-colors hover:border-accent"
     >
       <span className="caps text-muted">{formatDate(post.createdAt)}</span>
@@ -30,6 +31,6 @@ export function BlogCard({ post }: BlogCardProps) {
       </h3>
 
       <p className="text-small-body mt-auto text-muted">{post.excerpt}</p>
-    </Link>
+    </TransitionLink>
   );
 }

@@ -6,6 +6,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ReactLenis, useLenis } from "lenis/react";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { createBackgroundProgress } from "@/animations/backgroundProgress";
+import { registerLenisControls, resumeLenis } from "@/lib/lenis-bridge";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -13,19 +15,31 @@ type SmoothScrollProps = {
   children: React.ReactNode;
 };
 
-// Ponte entre o Lenis (scroll suave) e o GSAP ScrollTrigger:
-// - a cada scroll do Lenis, atualiza o ScrollTrigger (senão as animações de scrub "atrasam");
-// - a cada troca de rota, volta ao topo e dá refresh nos triggers (recalcula posições).
 function ScrollBridge() {
   const pathname = usePathname();
   const lenis = useLenis(() => ScrollTrigger.update());
 
+  useEffect(() => {
+    if (!lenis) {
+      registerLenisControls(null);
+      return;
+    }
+
+    registerLenisControls({
+      stop: () => lenis.stop(),
+      start: () => lenis.start(),
+    });
+
+    return () => registerLenisControls(null);
+  }, [lenis]);
+
   useGSAP(() => {
     lenis?.scrollTo(0, { immediate: true });
+    resumeLenis();
     ScrollTrigger.refresh();
+    return createBackgroundProgress();
   }, [pathname, lenis]);
 
-  // Recalcula altura do documento após paint — evita Lenis “travado” antes do footer.
   useEffect(() => {
     const refresh = () => {
       lenis?.resize();

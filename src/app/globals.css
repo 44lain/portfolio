@@ -15,6 +15,7 @@
   --border-radius: 0.75rem;
   --card-radius: 1.5rem;
   --hover-radius: 2rem;
+  --bg-progress: 0;
 }
 
 @theme inline {
@@ -32,7 +33,11 @@
 }
 
 body {
-  background: var(--background);
+  background: color-mix(
+    in srgb,
+    var(--secondary) calc(var(--bg-progress) * 14%),
+    var(--background)
+  );
   color: var(--foreground);
   font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
@@ -279,4 +284,160 @@ body {
 .mdx-content pre code {
   background: none;
   padding: 0;
+}
+
+/* --- Motion (Sprint 3) --- */
+.hero-layer {
+  will-change: transform;
+}
+
+.section-heading-layer {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-layer,
+  .section-heading-layer {
+    display: none;
+  }
+
+  .loader-overlay {
+    display: none;
+  }
+}
+
+/* Progressive enhancement: parallax leve via Scroll-Driven Animations */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .section-heading-layer {
+      animation: section-heading-drift linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 50%;
+    }
+
+    .section-heading-layer:nth-child(2) {
+      animation-delay: -0.05s;
+    }
+
+    .section-heading-layer:nth-child(3) {
+      animation-delay: -0.1s;
+    }
+  }
+}
+
+@keyframes section-heading-drift {
+  from {
+    transform: translateY(12px);
+  }
+  to {
+    transform: translateY(-8px);
+  }
+}
+
+/* --- View Transitions (Sprint 4) --- */
+:root {
+  --vt-duration-exit: 150ms;
+  --vt-duration-enter: 210ms;
+  --vt-slide-offset: 48px;
+}
+
+.site-header {
+  view-transition-name: site-header;
+}
+
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+
+::view-transition-old(site-header) {
+  display: none;
+}
+
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+::view-transition-old(.page-fade),
+::view-transition-new(.page-fade) {
+  animation-duration: 0.45s;
+  animation-timing-function: ease-in-out;
+}
+
+::view-transition-old(.page-fade) {
+  animation-name: vt-fade-out;
+}
+
+::view-transition-new(.page-fade) {
+  animation-name: vt-fade-in;
+}
+
+::view-transition-old(.nav-forward) {
+  --slide-offset: calc(var(--vt-slide-offset) * -1);
+  animation:
+    var(--vt-duration-exit) ease-in both vt-fade-out,
+    400ms ease-in-out both vt-slide-out;
+}
+
+::view-transition-new(.nav-forward) {
+  --slide-offset: var(--vt-slide-offset);
+  animation:
+    var(--vt-duration-enter) ease-out var(--vt-duration-exit) both vt-fade-in,
+    400ms ease-in-out both vt-slide-in;
+}
+
+::view-transition-old(.nav-back) {
+  --slide-offset: var(--vt-slide-offset);
+  animation:
+    var(--vt-duration-exit) ease-in both vt-fade-out,
+    400ms ease-in-out both vt-slide-out;
+}
+
+::view-transition-new(.nav-back) {
+  --slide-offset: calc(var(--vt-slide-offset) * -1);
+  animation:
+    var(--vt-duration-enter) ease-out var(--vt-duration-exit) both vt-fade-in,
+    400ms ease-in-out both vt-slide-in;
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-slide-out {
+  to {
+    translate: var(--slide-offset);
+  }
+}
+
+@keyframes vt-slide-in {
+  from {
+    translate: var(--slide-offset);
+  }
+}
+
+.page-transition-fallback-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  background: var(--background);
+  pointer-events: none;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
 }

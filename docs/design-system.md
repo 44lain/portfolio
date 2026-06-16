@@ -262,7 +262,7 @@ Ordem das seções (topo → base), conforme screenshots:
 6. **Services — cards inclinados**
 7. **Footer + faixa do nome** (fluxo normal; aparece 100% no fim)
 
-> O mesmo padrão (banner fixo + `.page-surface` + navbar/footer em fluxo) se repete em **todas as páginas**. O `RouteBanner` (client) escolhe o título do banner pela rota atual ("LAIN", "SOBRE", "PROJETOS", "BLOG", "CONTATO") usando o componente reutilizável `MarqueeBanner`.
+> O mesmo padrão (banner fixo + `.page-surface` + navbar/footer em fluxo) se repete em **todas as páginas**. O `RouteBanner` (client) escolhe o título do banner pela rota atual usando `AnimatedMarqueeBanner`.
 
 ### 1. Banner — nome/título gigante (`MarqueeBanner` via `RouteBanner`)
 
@@ -369,7 +369,7 @@ Server Component. Logo "LAIN" (`.text-nav-logo`, uppercase) + cluster de status 
 Client Component (`< md`). Botão grid 3×3 → painel fullscreen via portal (`z-[9999]`), transição CSS. Nav serif grande + socials + contato. Trava Lenis + overflow do body enquanto aberto; fecha com Esc / troca de rota. Ver seção **Menu mobile** acima.
 
 ### MarqueeBanner / RouteBanner
-`MarqueeBanner` (Server Component): nome/título gigante repetido em `.text-marquee`, `sticky top-0 z-0` (única camada fixa). Props: `text`, `repeat`, `asHeading`, `headingLabel`. `RouteBanner` (Client Component): escolhe o `text` pela rota (`usePathname`) e é renderizado no layout antes da navbar. Animação de marquee/paralaxe na Sprint 3.
+`AnimatedMarqueeBanner` (Client): nome/título gigante com camadas GSAP duplicadas + letreiro CSS, `sticky top-0 z-0`. `RouteBanner` resolve config via `resolveRouteBannerConfig()` em `/src/lib/route-banner.ts`.
 
 ### ProjectCard
 Bloco de cor (`accentColor`) + gradiente + título uppercase sobreposto, cantos arredondados grandes, hover de border-radius. Dados de `getProjects()`. Grid assimétrico.

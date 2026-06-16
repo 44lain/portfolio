@@ -1,13 +1,8 @@
-import Link from "next/link";
+import { LinkHover } from "@/components/ui/LinkHover";
 import { MobileMenu } from "@/components/ui/MobileMenu";
+import { TransitionLink } from "@/components/ui/TransitionLink";
+import { NAV_LINKS } from "@/lib/nav";
 import type { SocialLinks } from "@/types/content";
-
-const NAV_LINKS = [
-  { href: "/about", label: "Sobre" },
-  { href: "/work", label: "Projetos" },
-  { href: "/blog", label: "Blog" },
-  { href: "/contact", label: "Contato" },
-] as const;
 
 const HEADER_EMAIL = "lain.fork@gmail.com";
 
@@ -17,25 +12,23 @@ type HeaderProps = {
   socialLinks?: SocialLinks;
 };
 
-// Navbar dentro do .page-shell: sticky no topo ao rolar (mobile e desktop).
-// z-20 + fundo opaco cobre o banner fixo (z-0) enquanto o conteúdo (.page-surface) passa por baixo.
-// Sticky só funciona dentro do shell — não conflita com o MarqueeBanner (irmão anterior no DOM).
+// Navbar sticky dentro do .page-shell — view-transition-name mantém o header fixo nas animações de rota.
 export function Header({
   siteName = "Lain",
   availability = "Disponível Jul 2026",
   socialLinks = {},
 }: HeaderProps) {
   return (
-    <header className="sticky top-0 z-20 border-b border-secondary/40 bg-background">
+    <header className="site-header sticky top-0 z-20 border-b border-secondary/40 bg-background">
       <div className="content-container flex items-center justify-between gap-6 py-4">
-        {/* Grupo esquerdo: logo + status (email + disponibilidade) */}
         <div className="flex items-center gap-6">
-          <Link
+          <TransitionLink
             href="/"
+            transitionDirection="back"
             className="text-3xl md:text-5xl text-accent font-bold uppercase transition-colors hover:text-hover"
           >
             {siteName}
-          </Link>
+          </TransitionLink>
 
           <div className="hidden items-center gap-2 lg:flex">
             <a
@@ -51,20 +44,14 @@ export function Header({
           </div>
         </div>
 
-        {/* Nav à direita (desktop) */}
         <nav className="hidden items-center gap-8 md:flex" aria-label="Principal">
           {NAV_LINKS.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              className="link-underline text-small-heading text-muted hover:text-foreground"
-            >
+            <LinkHover key={href} href={href} tooltip={label} className="text-small-heading text-muted">
               {label}
-            </Link>
+            </LinkHover>
           ))}
         </nav>
 
-        {/* Mobile: menu em modal (botão de grid + painel animado) */}
         <MobileMenu
           siteName={siteName}
           email={HEADER_EMAIL}
