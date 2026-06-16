@@ -49,16 +49,16 @@ export default async function ProjectPage({
       </div>
 
       <div
-        className="relative mb-10 aspect-[16/9] w-full overflow-hidden rounded-card"
+        className="relative mb-10 w-[50vw] overflow-hidden rounded-card"
         style={{ backgroundColor: project.accentColor ?? "var(--color-secondary)" }}
       >
         {project.coverImage && (
           <Image
             src={project.coverImage}
             alt=""
-            fill
             className="object-cover"
-            sizes="(max-width: 768px) 100vw, 1200px"
+            width={1000}
+            height={1000}
             priority
           />
         )}
