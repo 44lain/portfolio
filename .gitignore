@@ -13,6 +13,11 @@
 # cursor
 .cursor/
 
+# Documentação interna — só local; no GitHub fica apenas docs/readme-svgs/
+docs/*
+!docs/readme-svgs/
+!docs/readme-svgs/**
+
 # testing
 /coverage
 
